@@ -1,7 +1,6 @@
 package ru.ptkom.provisor.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -9,19 +8,15 @@ import ru.ptkom.provisor.client.ECSSAPIClient;
 import ru.ptkom.provisor.dao.ECSSUserDataDAO;
 import ru.ptkom.provisor.dao.PBXUserDAO;
 import ru.ptkom.provisor.dao.UserDAO;
-import ru.ptkom.provisor.models.DataToMakeConfig;
 import ru.ptkom.provisor.models.PBXUser;
-import ru.ptkom.provisor.models.Role;
 import ru.ptkom.provisor.models.User;
 import ru.ptkom.provisor.models.sipUsers.OutUsers;
-import ru.ptkom.provisor.repository.PBXUsersRepository;
 import ru.ptkom.provisor.service.ConfigGeneratorForSNRVP5x;
 import ru.ptkom.provisor.service.ConfigGeneratorForSPA9xx;
 import ru.ptkom.provisor.service.UserService;
 
-import java.nio.charset.StandardCharsets;
+
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -132,7 +127,7 @@ public class IndexController {
 
     @GetMapping("/aliases")
     public String getAliases(Model model) {
-        List<List<String>> aliases = ecssUserDataDAO.listOfAliasesNamesTest(ecssapiClient.getListOfAliases());
+        List<List<String>> aliases = ecssUserDataDAO.listOfAliasesNames(ecssapiClient.getListOfAliases());
         model.addAttribute("aliases", aliases);
         return "users/aliases/show";
     }

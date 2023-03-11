@@ -22,7 +22,7 @@ public class ECSSUserDataDAO {
     private ECSSAPIClient ecssapiClient;
 
 
-    public List<List<String>> listOfAliasesNamesTest(String xml){
+    public List<List<String>> listOfAliasesNames(String xml){
          OutAliases data = xmlToAliasesObject(xml);
         List<List<String>> ifacesAndNames = new ArrayList<>();
 
@@ -47,15 +47,6 @@ public class ECSSUserDataDAO {
     }
 
 
-    public List<String> listOfAliasesNames(String xml){
-        OutUsers data = xmlToUsersObject(xml);
-        List<String> ifaces = new ArrayList<>();
-        for (int index=0; index<data.getUsers().size();index++){
-            ifaces.add(data.getUsers().get(index).getIface());
-        }
-        return ifaces;
-    }
-
 
     public OutUsers.User allAliasData(String number) {
         String xml = ecssapiClient.getAliasData(number);
@@ -64,12 +55,6 @@ public class ECSSUserDataDAO {
         System.out.println(data.getUsers().get(0).getLast_via());
         return data.getUsers().get(0);
     }
-
-
-
-
-
-
 
 
 
@@ -95,11 +80,6 @@ public class ECSSUserDataDAO {
 
 
     private OutAliases  xmlToAliasesObject(String xml) {
-
-
-//        xml = xml.replaceAll("<sip", "&lt;sip");
-//        xml = xml.replaceAll(">;", "&gt;;");
-
 
 
         try {
