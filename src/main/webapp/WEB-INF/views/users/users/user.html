@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:insert="~{fragments/base :: head}"></div>
+    <title>Title</title>
+</head>
+<body>
+<div th:insert="~{fragments/base :: body}"></div>
+
+<table class="table table-hover">
+
+    <tr>
+        <th>
+            <a th:utext="Параметр"/>
+        </th>
+        <th>
+            <a th:utext="Значение"/>
+        </th>
+    </tr>
+
+
+    <tr>
+        <td>
+            Идентификатор в БД:
+        </td>
+        <td>
+            <a th:utext="${user.getId()}"/>
+        </td>
+    </tr>
+
+
+    <tr>
+        <td>
+            Имя пользователя:
+        </td>
+        <td>
+            <a th:utext= "${user.getUsername()}"/>
+        </td>
+    </tr>
+
+
+    <tr>
+        <td>
+            Права:
+        </td>
+        <td>
+            <p th:each="role : ${user.getRoles()}" th:text="${role.getName()}"/>
+        </td>
+    </tr>
+
+
+    <tr>
+        <td>
+            Пользователь телефонии:
+        </td>
+        <td th:switch="${user.getPbxUser()}">
+            <span th:case="null" th:utext= "${'-'}"></span>
+            <span th:case="*" th:utext = "${user.getPbxUser().getName()}" th:href="@{/workers/{id}(id=${user.getPbxUser().getId()})}"></span>
+        </td>
+    </tr>
+
+
+    <tr>
+        <td>
+            Номер:
+        </td>
+        <td th:switch="${user.getPbxUser()}">
+            <span th:case="null" th:utext= "${'-'}"></span>
+            <span th:case="*" th:utext = "${user.getPbxUser().getNumber()}" th:href="@{/workers/{id}(id=${user.getPbxUser().getId()})}"></span>
+        </td>
+    </tr>
+</table>
+
+<p><a th:href="@{/users/{id}/edit(id=${user.getId()})}">
+    <button type="button" class="btn btn-outline-warning">Изменить</button>
+</a></p>
+
+<p><a href="/users">
+    <button type="button" class="btn btn-outline-dark">Назад</button>
+</a></p>
+
+</body>
+</html>

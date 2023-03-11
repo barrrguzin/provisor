@@ -1,0 +1,121 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8">
+    <title>Авторизация</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<link th:href="@{/static/css/other.css}" rel="stylesheet">
+
+    <!-- Favicons -->
+<link rel="apple-touch-icon" th:href="@{/static/img/icon.ico}" sizes="180x180">
+<link rel="icon" th:href="@{/static/img/icon.ico}" sizes="32x32" type="image/png">
+<link rel="icon" th:href="@{/static/img/icon.ico}" sizes="16x16" type="image/png">
+<link rel="manifest" href="manifest.json">
+<link rel="mask-icon" th:href="@{/static/img/icon.ico}" color="#712cf9">
+<link rel="icon" th:href="@{/static/img/icon.ico}">
+<meta name="theme-color" content="#712cf9">
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+
+      .b-example-divider {
+        height: 3rem;
+        background-color: rgba(0, 0, 0, .1);
+        border: solid rgba(0, 0, 0, .15);
+        border-width: 1px 0;
+        box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+      }
+
+      .b-example-vr {
+        flex-shrink: 0;
+        width: 1.5rem;
+        height: 100vh;
+      }
+
+      .bi {
+        vertical-align: -.125em;
+        fill: currentColor;
+      }
+
+      .nav-scroller {
+        position: relative;
+        z-index: 2;
+        height: 2.75rem;
+        overflow-y: hidden;
+      }
+
+      .nav-scroller .nav {
+        display: flex;
+        flex-wrap: nowrap;
+        padding-bottom: 1rem;
+        margin-top: -1px;
+        overflow-x: auto;
+        text-align: center;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+      }
+
+
+    </style>
+
+
+    <!-- Custom styles for this template -->
+    <link th:href="@{/static/css/sing.css}" rel="stylesheet">
+  </head>
+  <body class="text-center">
+
+
+
+
+
+<main class="form-signin w-100 m-auto">
+
+  <form th:action="@{/login}" method="post" class="form-signin">
+    <img class="mb-4" th:src="@{/static/img/icon.ico}" alt="" width="180" height="180">
+    <h1 class="h3 mb-3 fw-normal">Вход</h1>
+
+    <div class="form-floating">
+      <input type="text" class="form-control" id="username" placeholder="login" name="username" value="" required>
+      <label for="username">Логин</label>
+    </div>
+    <div class="form-floating">
+      <input type="password" class="form-control" id="password" placeholder="password" name="password" value="" required>
+      <label for="password">Пароль</label>
+    </div>
+
+    <div class="checkbox mb-3">
+      <label>
+        <input type="checkbox" value="remember-me" name="remember-me"> Запомнить
+      </label>
+    </div>
+    <button class="w-100 btn btn-lg btn-primary" type="submit">Войти</button>
+    <p class="mt-5 mb-3 text-muted">&copy; 1984</p>
+  </form>
+
+  <div th:if="${param.error}" color="#FF0000">
+    Invalid username and password.
+  </div>
+  <div th:if="${param.logout}" color="#FF0000">
+    You have been logged out.
+  </div>
+
+</main>
+
+
+
+  </body>
+</html>

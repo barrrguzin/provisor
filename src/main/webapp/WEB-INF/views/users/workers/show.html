@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:insert="~{fragments/base :: head}"></div>
+    <title>Список рабочих с телефоном</title>
+</head>
+<body>
+<div th:insert="~{fragments/base :: body}"></div>
+
+<p><a href="/workers/add">
+    <button type="button" class="btn btn-outline-success">Добавить пользователя телефона</button>
+</a></p>
+
+<p><a href="/">
+    <button type="button" class="btn btn-outline-dark">Назад</button>
+</a></p>
+
+<table class="table table-hover">
+    <tr>
+
+        <th>Номер</th>
+        <th>Имя</th>
+        <th>MAC-адрес</th>
+        <th>Модель аппарата</th>
+
+    </tr>
+    <div th:each="user : ${users}">
+        <tr>
+            <td>
+                <a th:utext= "${user.getNumber()}" th:href="@{/aliases/{number}@voip.ptk.loc(number=${user.getNumber()})}"/>
+            </td>
+            <td>
+                <a th:utext= "${user.getName()}" th:href="@{/workers/{id}(id=${user.getId()})}"/>
+            </td>
+            <td>
+                <a th:utext= "${user.getMac()}"/>
+            </td>
+            <td>
+                <a th:utext= "${user.getPhoneModel()}"/>
+            </td>
+        </tr>
+    </div>
+
+</table>
+
+
+</body>
+</html>
+
+

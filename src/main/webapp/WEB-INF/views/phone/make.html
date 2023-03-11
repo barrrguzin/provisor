@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:insert="~{fragments/base :: head}"></div>
+    <title>Генератор конфига для Linksys9XX</title>
+</head>
+<body>
+<div th:insert="~{fragments/base :: body}"></div>
+<h1>Введите данные для генерации конфиг файлы:</h1>
+<p th:text="${result}"></p>
+<form th:acttion="@{/spa9xx/make-config}" th:method="post">
+    <table>
+        <tr>
+            <th>
+    <label for="number">Введите номер телефона:</label>
+            </th>
+            <th>
+    <input type="tel" id="number" name="number" th:value="${number}" placeholder="xxx">
+            </th>
+        </tr>
+    </table>
+    <p><button type="submit" class="btn btn-outline-success">Добавить</button>
+</form>
+
+<p><a href="/">
+    <button type="button" class="btn btn-outline-dark">Назаад</button>
+</a></p>
+
+</body>
+</html>

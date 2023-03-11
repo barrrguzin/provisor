@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:insert="~{fragments/base :: head}"></div>
+    <title th:text="${user.getName()}">USER</title>
+</head>
+<body>
+<div th:insert="~{fragments/base :: body}"></div>
+
+<table class="table table-hover">
+
+    <tr>
+        <th>
+            <a th:utext="Параметр"/>
+        </th>
+        <th>
+            <a th:utext="Значение"/>
+        </th>
+    </tr>
+
+
+    <tr>
+        <td>
+            Идентификатор в БД:
+        </td>
+        <td>
+            <a th:utext="${user.getId()}"/>
+        </td>
+    </tr>
+
+
+    <tr>
+        <td>
+            Имя пользователя:
+        </td>
+        <td>
+            <a th:utext="${user.getName()}"/>
+        </td>
+    </tr>
+
+
+    <tr>
+        <td>
+            Внутренний номер:
+        </td>
+        <td>
+            <a th:utext="${user.getNumber()}"/>
+        </td>
+    </tr>
+
+
+    <tr>
+        <td>
+            MAC-аддрес ТА:
+        </td>
+        <td>
+            <a th:utext="${user.getMac()}"/>
+        </td>
+    </tr>
+
+
+    <tr>
+        <td>
+            Модель телефона:
+        </td>
+        <td>
+            <a th:utext="${user.getPhoneModel()}"/>
+        </td>
+    </tr>
+</table>
+
+<p><a th:href="@{/workers/{id}/edit(id=${user.getId()})}">
+    <button type="button" class="btn btn-outline-warning">Изменить</button>
+</a></p>
+
+<p><a href="/workers">
+    <button type="button" class="btn btn-outline-dark">Назад</button>
+</a></p>
+
+</body>
+</html>
+
+
+
+<!--<p th:text="'Идентификатор в БД: ' + ${user.getId()}">ID</p>-->
+<!--<p th:text="'Имя пользователя: ' + ${user.getName()}">NAME</p>-->
+<!--<p th:text="'Внутренний номер: ' + ${user.getNumber()}">NUMBER</p>-->
+<!--<p th:text="'MAC-аддрес ТА: ' + ${user.getMac()}">MAC</p>-->
+<!--<p th:text="'Модель телефона: ' + ${user.getPhoneModel()}">MODEL</p>-->
+<!--<p><a th:href="@{/workers/{id}/edit(id=${user.getId()})}">Изменить?</a></p>-->

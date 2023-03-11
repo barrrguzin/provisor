@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <div th:insert="~{fragments/base :: head}"></div>
+  <title>Title</title>
+</head>
+<body>
+<div th:insert="~{fragments/base :: body}"></div>
+
+<form th:method="patch" th:action="@{/users/edit}" th:object="${user}">
+
+<table class="table table-hover">
+
+  <tr>
+    <th>
+      <a th:utext="Параметр"/>
+    </th>
+    <th>
+      <a th:utext="Значение"/>
+    </th>
+  </tr>
+
+
+  <tr>
+    <td>
+      Имя пользователя:
+    </td>
+    <td>
+      <input type="text" id="username" th:field="*{username}" required>
+    </td>
+  </tr>
+
+
+  <tr>
+    <td>
+      Пароль:
+    </td>
+    <td>
+      <input type="text" id="password" th:field="*{password}">
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      Номер:
+    </td>
+    <td>
+    <input type="text" id="pbxuser" th:field="*{pbxUser.number}">
+    </td>
+  </tr>
+</table>
+  <label th:utext="${result}" />
+  <label for="role">Права:</label>
+  <div class="form-check margin-left-10" th:each="role : ${list}">
+    <input class="form-check-input" id="role" type="checkbox" th:value="${role}" name="rolesList"><p>
+    <label class="form-check-label" for="role" th:text="${role}"/>
+  </div>
+
+
+  <p><button type="submit" class="btn btn-outline-warning" id="edit">Изменить</button>
+<!--  <p><button type="submit" id="delete" th:method="delete" th:formaction="@{/users/delete}">Удалить?</button>-->
+
+</form>
+
+<form th:method="delete" th:action="@{/users/delete}" th:object="${user}">
+  <input type="hidden" id="username" th:field="*{username}">
+  <input type="hidden" id="id" th:field="*{id}">
+  <p><button type="submit" class="btn btn-outline-danger" id="delete">Удалить</button>
+</form>
+
+<p><a href="/users">
+  <button type="button" class="btn btn-outline-dark">Назад</button>
+</a></p>
+
+</body>
+</html>

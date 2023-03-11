@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <div th:insert="~{fragments/base :: head}"></div>
+  <title>Генератор конфига для Linksys9XX</title>
+</head>
+<body>
+<div th:insert="~{fragments/base :: body}"></div>
+<h1>Результат:</h1>
+<p></p>
+<p th:text="${data.result}"/>
+<form action="/spa9xx/make-config">
+<button>Еще по одной?</button>
+</form>
+<form action="/">
+<button>Выход</button>
+</form>
+</body>
+</html>

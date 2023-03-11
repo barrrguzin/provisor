@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:insert="~{fragments/base :: head}"></div>
+    <title th:text="${data.getIface()}">ALIAS</title>
+</head>
+<body>
+<div th:insert="~{fragments/base :: body}"></div>
+
+<p><a href="/aliases">
+    <button type="button" class="btn btn-outline-dark">Назад</button>
+</a></p>
+
+<table class="table table-hover">
+
+    <tr>
+        <th>
+            <a th:utext="Параметр"/>
+        </th>
+        <th>
+            <a th:utext="Значение"/>
+        </th>
+    </tr>
+
+
+    <tr>
+        <td>
+            Имя алиаса:
+        </td>
+        <td>
+            <a th:utext="${data.getIface()}"/>
+        </td>
+    </tr>
+
+
+    <tr>
+        <td>
+            Логин:
+        </td>
+        <td>
+            <a th:utext="${data.getLogin()}"/>
+        </td>
+    </tr>
+
+
+    <tr>
+        <td>
+            Пароль:
+        </td>
+        <td>
+            <a th:utext="${data.getPassword()}"/>
+        </td>
+    </tr>
+
+
+    <tr>
+        <td>
+            Contact:
+        </td>
+        <td>
+            <a th:utext="${data.getContact()}"/>
+        </td>
+    </tr>
+
+
+    <tr>
+        <td>
+            User agent:
+        </td>
+        <td>
+            <a th:utext="${data.getUser_agent()}"/>
+        </td>
+    </tr>
+</table>
+
+
+
+</body>
+</html>
+
+
+
+<!--<p th:text="'Имя алиаса: ' + ${data.getIface()}">NUMBER</p>-->
+<!--<p th:text="'Логин: ' + ${data.getLogin()}">LOGIN</p>-->
+<!--<p th:text="'Пароль: ' + ${data.getPassword()}">PASSWORD</p>-->
+<!--<p th:text="'Contact: ' + ${data.getContact()}">CONTACT</p>-->
+<!--<p th:text="'User agent: ' + ${data.getUser_agent()}">AGENT</p>-->

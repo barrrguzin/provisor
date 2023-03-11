@@ -1,0 +1,6 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="provision">
+    <output-path>$PROJECT_DIR$/.gitignore/out/artifacts/provision</output-path>
+    <root id="archive" name="provision.war" />
+  </artifact>
+</component>

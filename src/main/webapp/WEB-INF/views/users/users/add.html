@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:insert="~{fragments/base :: head}"></div>
+    <title>Добавить рабочего</title>
+</head>
+<body>
+<div th:insert="~{fragments/base :: body}"></div>
+<h1>Введите данные о сотруднике:</h1>
+<form th:action="@{/users/add}" th:object="${user}" th:method="post">
+    <label for="login">Логин:</label>
+    <input type="text" id="login" th:field="*{username}" required>
+    <p>
+    <label for="password">Пароль:</label>
+    <input type="password" id="password" th:field="*{password}" required>
+    <p>
+    <label for="number">Номер:</label>
+    <input type="tel" id="number" th:field="*{pbxUser.number}">
+    <p>
+    <label for="role">Уровень доступа:</label><p>
+    <div class="form-check margin-left-10" th:each="role : ${list}">
+        <input class="form-check-input" id="role" type="checkbox" th:value="${role}" name="rolesList"><p>
+        <label class="form-check-label" for="role" th:text="${role}"/>
+    </div>
+
+    <p><button type="submit" class="btn btn-outline-success">Добавить</button>
+</form>
+<p><a href="/users">
+    <button type="button" class="btn btn-outline-danger">Назад</button>
+</a></p>
+</body>
+</html>
+
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />-->
+<!--    <title>Добавить рабочего</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<h1>Введите данные о сотруднике:</h1>-->
+<!--<form th:acttion="@{/users/add}" th:object="${user}" th:method="post">-->
+<!--    <label for="login">Логин:</label>-->
+<!--    <input type="text" id="login" th:field="*{login}">-->
+<!--    <p>-->
+<!--        <label for="password">Пароль:</label>-->
+<!--        <input type="password" id="password" th:field="*{password}">-->
+<!--    <p>-->
+<!--        <label for="role">Уровень доступа:</label>-->
+<!--        <input type="text" id="role" th:field="*{role}">-->
+<!--    <p>-->
+<!--        <label for="phoneModel">Выберите модель телефона:</label>-->
+<!--        <select id="phoneModel" th:field="*{phoneModel}">-->
+<!--            <option th:each="model : ${list}" th:text="${model}" th:value="${model}">MODEL</option>-->
+<!--        </select>-->
+<!--    <p><button type="submit">Добавить</button>-->
+<!--</form>-->
+<!--<div th:each="user : ${users}">-->
+<!--    <li><a th:utext="'Имя: ' + ${user.getName()} + ', Номер: ' + ${user.getNumber()} + ', Mac-адрес: ' + ${user.getMac()} + ', Модель аппарата: ' + ${user.getPhoneModel()}">WORKER</a></li>-->
+<!--</div>-->
+<!--<p><a href="/menu">Назаад?</a></p>-->
+<!--</body>-->
+<!--</html>-->

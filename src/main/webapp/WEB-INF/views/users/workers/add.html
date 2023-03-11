@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:insert="~{fragments/base :: head}"></div>
+    <title>Добавить рабочего</title>
+</head>
+<body>
+<div th:insert="~{fragments/base :: body}"></div>
+<h1>Введите данные о сотруднике:</h1>
+<form th:acttion="@{/workers/add}" th:object="${user}" th:method="post">
+    <table class="table table-hover">
+
+        <tr>
+            <th>
+                <a th:utext="Параметр"/>
+            </th>
+            <th>
+                <a th:utext="Значение"/>
+            </th>
+        </tr>
+        <tr>
+            <th>
+    <label for="name">Введите ФИО рабочего:</label>
+            </th>
+            <th>
+    <input type="text" id="name" placeholder="Анатолий Анатолий Анатолиевич" th:field="*{name}" required>
+            </th>
+        </tr>
+        <tr>
+            <th>
+    <label for="number">Введите номер телефона:</label>
+            </th>
+            <th>
+    <input type="text" id="number" placeholder="xxx" th:field="*{number}" required>
+            </th>
+        </tr>
+        <tr>
+            <th>
+    <label for="mac">Введите MAC-адрес аппарата:</label>
+            </th>
+            <th>
+    <input type="text" id="mac" placeholder="xx:xx:xx:xx:xx:xx" th:field="*{mac}" required>
+            </th>
+        </tr>
+        <tr>
+            <th>
+    <label for="phoneModel">Выберите модель телефона:</label>
+            </th>
+            <th>
+    <select id="phoneModel" th:field="*{phoneModel}">
+        <option th:each="model : ${list}" th:text="${model}" th:value="${model}" required>MODEL</option>
+    </select>
+            </th>
+        </tr>
+        </table>
+    <button type="submit" class="btn btn-outline-success">Добавить</button><p/>
+</form>
+<p><a href="/workers">
+    <button type="button" class="btn btn-outline-dark">Назад</button>
+</a></p>
+
+</body>
+</html>
