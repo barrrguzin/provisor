@@ -22,79 +22,79 @@ public class OutUsers {
 @XmlAccessorType(XmlAccessType.NONE)
 public static class User {
 
-    @XmlAttribute
+    @XmlAttribute(name = "active")
     private boolean active;
-    @XmlAttribute
+    @XmlAttribute(name = "alarm_enable")
     private boolean alarm_enable;
     @XmlAttribute(name = "aliases_list")
     private String aliases_list;
-    @XmlAttribute
+    @XmlAttribute(name = "auth")
     private String auth;
-    @XmlAttribute
+    @XmlAttribute(name = "auth_qop")
     private boolean auth_qop;
-    @XmlAttribute
+    @XmlAttribute(name = "auto_answer_version")
     private String auto_answer_version;
-    @XmlAttribute
+    @XmlAttribute(name = "category_to_sip")
     private String category_to_sip;
-    @XmlAttribute
+    @XmlAttribute(name = "contact")
     private String contact;
-    @XmlAttribute
+    @XmlAttribute(name = "digest")
     private boolean digest;
-    @XmlAttribute
+    @XmlAttribute(name = "display_encoding")
     private String display_encoding;
-    @XmlAttribute
+    @XmlAttribute(name = "domain")
     private String domain;
-    @XmlAttribute
+    @XmlAttribute(name = "dtmf_relay")
     private boolean dtmf_relay;
-    @XmlAttribute
+    @XmlAttribute(name = "fork_mode")
     private String fork_mode;
-    @XmlAttribute
+    @XmlAttribute(name = "group")
     private String group;
-    @XmlAttribute
+    @XmlAttribute(name = "id")
     private String id;
-    @XmlAttribute
+    @XmlAttribute(name = "iface")
     private String iface;
-    @XmlAttribute
+    @XmlAttribute(name = "last_via")
     private String last_via;
-    @XmlAttribute
+    @XmlAttribute(name = "login")
     private String login;
-    @XmlAttribute
+    @XmlAttribute(name = "my_from")
     private String my_from;
-    @XmlAttribute
+    @XmlAttribute(name = "nat_traversal")
     private boolean nat_traversal;
-    @XmlAttribute
+    @XmlAttribute(name = "original_cdpn_to")
     private boolean original_cdpn_to;
-    @XmlAttribute
+    @XmlAttribute(name = "owner")
     private String owner;
-    @XmlAttribute
+    @XmlAttribute(name = "password")
     private String password;
-    @XmlAttribute
+    @XmlAttribute(name = "referred_by_as_cgpn")
     private boolean referred_by_as_cgpn;
-    @XmlAttribute
+    @XmlAttribute(name = "reg_expire_max")
     private int reg_expire_max;
-    @XmlAttribute
+    @XmlAttribute(name = "reg_expire_min")
     private int reg_expire_min;
-    @XmlAttribute
+    @XmlAttribute(name = "registered_domain_to_invite")
     private boolean registered_domain_to_invite;
-    @XmlAttribute
+    @XmlAttribute(name = "remote_ctr_indication")
     private String remote_ctr_indication;
-    @XmlAttribute
+    @XmlAttribute(name = "req100rel")
     private boolean req100rel;
-    @XmlAttribute
+    @XmlAttribute(name = "rfc4028_control")
     private String rfc4028_control;
-    @XmlAttribute
+    @XmlAttribute(name = "routing_context")
     private String routing_context;
-    @XmlAttribute
+    @XmlAttribute(name = "sip_domain")
     private String sip_domain;
-    @XmlAttribute
+    @XmlAttribute(name = "sip_modifications")
     private String sip_modifications;
-    @XmlAttribute
+    @XmlAttribute(name = "symbol_hash_as_is")
     private boolean symbol_hash_as_is;
-    @XmlAttribute
+    @XmlAttribute(name = "tel_uri_in_diversion")
     private boolean tel_uri_in_diversion;
-    @XmlAttribute
+    @XmlAttribute(name = "transit")
     private String transit;
-    @XmlAttribute
+    @XmlAttribute(name = "trusted_ip")
     private boolean trusted_ip;
     @XmlAttribute(name = "user_agent")
     private String user_agent;

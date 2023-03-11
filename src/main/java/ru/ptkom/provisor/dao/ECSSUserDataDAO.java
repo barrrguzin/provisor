@@ -60,6 +60,8 @@ public class ECSSUserDataDAO {
     public OutUsers.User allAliasData(String number) {
         String xml = ecssapiClient.getAliasData(number);
         OutUsers data = xmlToUsersObject(xml);
+        System.out.println(xml);
+        System.out.println(data.getUsers().get(0).getLast_via());
         return data.getUsers().get(0);
     }
 
