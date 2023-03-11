@@ -51,8 +51,6 @@ public class ECSSUserDataDAO {
     public OutUsers.User allAliasData(String number) {
         String xml = ecssapiClient.getAliasData(number);
         OutUsers data = xmlToUsersObject(xml);
-        System.out.println(xml);
-        System.out.println(data.getUsers().get(0).getLast_via());
         return data.getUsers().get(0);
     }
 
@@ -72,7 +70,6 @@ public class ECSSUserDataDAO {
             JAXBContext jaxbContext = JAXBContext.newInstance(OutUsers.class);
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
             OutUsers respone = (OutUsers) unmarshaller.unmarshal(sr);
-            System.out.println(respone.getUsers().get(0).getContact());
             return respone;
         } catch (JAXBException e) {
             throw new RuntimeException(e);

@@ -175,7 +175,7 @@ public String getAliasData(String number) {
         listOfSip.add(sip);
         request.setSip(listOfSip);
 
-        //System.out.println(sendRequest(request).getBody().toString());
+
         return sendRequest(request).getBody().toString();
 }
 
