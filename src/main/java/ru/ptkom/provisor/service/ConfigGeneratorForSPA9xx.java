@@ -69,6 +69,7 @@ public class ConfigGeneratorForSPA9xx {
             configFile.write(config);
             configFile.flush();
             configFile.close();
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

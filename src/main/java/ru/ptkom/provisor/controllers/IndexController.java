@@ -1,9 +1,17 @@
 package ru.ptkom.provisor.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import ru.ptkom.provisor.client.ECSSAPIClient;
 import ru.ptkom.provisor.dao.ECSSUserDataDAO;
 import ru.ptkom.provisor.dao.PBXUserDAO;
@@ -11,11 +19,14 @@ import ru.ptkom.provisor.dao.UserDAO;
 import ru.ptkom.provisor.models.PBXUser;
 import ru.ptkom.provisor.models.User;
 import ru.ptkom.provisor.models.sipUsers.OutUsers;
-import ru.ptkom.provisor.service.ConfigGeneratorForSNRVP5x;
-import ru.ptkom.provisor.service.ConfigGeneratorForSPA9xx;
-import ru.ptkom.provisor.service.UserService;
+import ru.ptkom.provisor.service.*;
 
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpUtils;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
@@ -44,14 +55,82 @@ public class IndexController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    @Qualifier("RestTemplateWithDigestAuth")
+    private RestTemplate restTemplate;
+
+    @Autowired
+    private RequestService requestService;
+
+    @Autowired
+    private ReadFileService readFileService;
+
+
+    @GetMapping("/ping")
+    public String testPing(){
+
+
+        for (int i = 1; i<255; i++) {
+            String address = "10.60.0." + i;
+            boolean reachable = false;
+            try {
+                reachable = InetAddress.getByName(address).isReachable(100);
+            } catch (UnknownHostException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            if (reachable == true){
+            System.out.println(address + " --- " + reachable);
+            }
+        }
+
+
+        return "redirect:/";
+    }
+
+
+    @GetMapping("/test-digest")
+    public @ResponseBody String testDigest() {
+        String uri = "http://192.168.68.11/admin/resync?";
+        ResponseEntity entity = restTemplate.exchange(uri, HttpMethod.GET, null, String.class);
+        System.out.println(entity.getStatusCode());
+        return entity.getBody().toString();
+    }
+
+
+    @GetMapping("/basic")
+    public String basicToMenuRedirect(){
+        return "redirect:/";
+    }
+
+
+    @GetMapping("/linksys/{configName}")
+    public @ResponseBody String addressesControl(@PathVariable("configName") String configName, HttpServletRequest request){
+
+        String ip = requestService.getClientIp(request);
+        String mac = configName.replace("spa", "").replace(".cfg", "");
+        String output = "Конфиг получен: IP: " + ip + ", MAC: " + mac;
+        String response = readFileService.getConfigFile(configName);
+
+//        if (response.length == 1) {
+//            output = "Ошибка: IP: " + ip + ", Пытался получить: " + configName + ". Файл не обнаржен.";
+//        }
+
+
+        System.out.println(output);
+
+        return response;
+
+    }
+
+
+
 
     @GetMapping("/video")
     public String testVideo() {
         return "video";
     }
-
-
-
 
 
     @GetMapping("/")
@@ -159,30 +238,43 @@ public class IndexController {
     @PostMapping("/config/make")
     public String makeConfigPhoneApparation(@RequestParam String number, Model model) {
 
+        String result = "Произошла ошибка(";
+
             if(number.equals("")){
-                model.addAttribute("result", "Вы бы ввели хоть что-нибудь");
+                result = "Вы бы ввели хоть что-нибудь";
+                model.addAttribute("result", result);
                 return "phone/make";
             }
             String mac = pbxUserDAO.getMacByNumber(number);
             String phoneModel = pbxUserDAO.getPhoneModelByNumber(number);
 
             if(mac == null || phoneModel == null){
-                model.addAttribute("result", "Пользователь с данным номером не найден");
+                result = "Пользователь с данным номером не найден";
+                model.addAttribute("result", result);
                 return "phone/make";
             }
 
-            if (phoneModel.equals("spa9XX")){
-                configGeneratorForSPA9xx.generateConfigFile(number, mac);
-                model.addAttribute("result", "Success!");
-                return "phone/make";
-            }
-            if (phoneModel.equals("vp5X")){
-                configGeneratorForSNRVP5x.generateConfigFile(number,mac);
-                model.addAttribute("result", "Success!");
-                return "phone/make";
-            }
-            else {
-                model.addAttribute("result", "Генератор конфига для данного ТА не существует(");
+            try {
+                if (phoneModel.equals("spa9XX")){
+                    configGeneratorForSPA9xx.generateConfigFile(number, mac);
+                    result = "Success!";
+                    model.addAttribute("result", result);
+                    return "phone/make";
+                }
+                if (phoneModel.equals("vp5X")){
+                    configGeneratorForSNRVP5x.generateConfigFile(number,mac);
+                    result = "Success!";
+                    model.addAttribute("result", result);
+                    return "phone/make";
+                }
+                else {
+                    result = "Генератор конфига для данного ТА не существует(";
+                    model.addAttribute("result", result);
+                    return "phone/make";
+                }
+            } catch (Exception e) {
+                result = e.toString();
+                model.addAttribute("result", result);
                 return "phone/make";
             }
         }

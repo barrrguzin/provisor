@@ -1,6 +1,8 @@
 package ru.ptkom.provisor.client;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -27,6 +29,11 @@ import java.util.List;
 
 @Component
 public class ECSSAPIClient {
+
+    @Autowired
+    @Qualifier("RestTemplate")
+    private RestTemplate restTemplate;
+
 
 
     private static final String ECSS_IP_ADDRESS;
@@ -85,7 +92,7 @@ public class ECSSAPIClient {
         reAutfIfNeeded();
 
 
-        RestTemplate restTemplate = new RestTemplate();
+        //RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8));
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.add("Cookie", TOKEN);
@@ -98,7 +105,7 @@ public class ECSSAPIClient {
 
     private void getAuth(){
 
-        RestTemplate restTemplate = new RestTemplate();
+        //RestTemplate restTemplate = new RestTemplate();
         HttpHeaders requestHeaders = new HttpHeaders();
         //requestHeaders.add("Cookie", "token="+TOKEN);
         HttpEntity requestEntity = new HttpEntity(AUTH_REQUEST, requestHeaders);
@@ -110,7 +117,7 @@ public class ECSSAPIClient {
 
     private Integer getCheck(){
         int statusCode = 666;
-        RestTemplate restTemplate = new RestTemplate();
+        //RestTemplate restTemplate = new RestTemplate();
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.add("Cookie", TOKEN);
         HttpEntity requestEntity = new HttpEntity(requestHeaders);
@@ -206,7 +213,7 @@ private ResponseEntity sendRequest(In request){
 
 
 
-    RestTemplate restTemplate = new RestTemplate();
+    //RestTemplate restTemplate = new RestTemplate();
     HttpHeaders requestHeaders = new HttpHeaders();
     requestHeaders.add("Cookie", TOKEN);
     HttpEntity requestEntity = new HttpEntity(xmlContent, requestHeaders);
