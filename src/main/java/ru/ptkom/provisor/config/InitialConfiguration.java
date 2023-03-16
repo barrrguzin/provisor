@@ -8,6 +8,7 @@ import ru.ptkom.provisor.models.Role;
 import ru.ptkom.provisor.models.User;
 import ru.ptkom.provisor.repository.RoleRepository;
 import ru.ptkom.provisor.repository.UserRepository;
+import ru.ptkom.provisor.service.UdpSocketService;
 import ru.ptkom.provisor.service.UserService;
 
 import javax.annotation.PostConstruct;
@@ -27,6 +28,8 @@ public class InitialConfiguration {
     private UserRepository userRepository;
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private UdpSocketService udpSocketService;
 
     @PostConstruct
     public void setDefaultUser() {
@@ -75,5 +78,11 @@ public class InitialConfiguration {
 
 
         System.out.println("System roles set");
+    }
+
+
+    @PostConstruct
+    public void sipSocket() {
+        //udpSocketService.startUdpSocket(5060);
     }
 }

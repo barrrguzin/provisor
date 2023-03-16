@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:insert="~{fragments/base :: head}"></div>
+    <title>Обнаруженные устройства</title>
+</head>
+<body>
+<div th:insert="~{fragments/base :: body}"></div>
+<p><a href="/">
+    <button type="button" class="btn btn-outline-dark">Назад</button>
+</a></p>
+<p><a href="/network">
+    <button type="button" class="btn btn-outline-dark">Сканировать еще раз</button>
+</a></p>
+<div th:switch="${hosts[0][0]}">
+    <span th:case="${'IP адресов в сети не обнаружено'}" th:utext= "${'IP адресов в сети не обнаружено'}"></span>
+    <span th:case="*">
+        <table class="table table-hover">
+            <tr>
+                <th>IP адрес</th>
+                <th>MAC-адрес</th>
+                <th>Пользователь</th>
+                <th>Номер</th>
+                <th>Модель аппарата</th>
+            </tr>
+
+            <tr th:each="host : ${hosts}">
+
+                <td>
+                    <a th:utext= "${host[0]}"/>
+                </td>
+
+                <td>
+                    <a th:utext= "${host[1]}"/>
+                </td>
+
+                <td>
+                    <a th:utext= "${host[2]}"/>
+                </td>
+
+                <td>
+                    <a th:utext= "${host[3]}"/>
+                </td>
+
+                <td>
+                    <a th:utext= "${host[4]}"/>
+                </td>
+
+            </tr>
+
+        </table>
+    </span>
+</div>
+
+</body>
+</html>

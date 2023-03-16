@@ -20,6 +20,8 @@ public class ConfigGeneratorForSNRVP5x {
 
     @Autowired
     private ECSSUserDataDAO ecssUserDataDAO;
+    @Autowired
+    private FileService fileService;
 
 
     private static final String PATH_TO_INIT_CONFIG;
@@ -83,7 +85,7 @@ public class ConfigGeneratorForSNRVP5x {
 
 
         try {
-            template = openAndRead(PATH_TO_TEMPLATE);
+            template = fileService.openAndRead(PATH_TO_TEMPLATE);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -114,43 +116,5 @@ public class ConfigGeneratorForSNRVP5x {
 
 
 
-    }
-
-
-
-    private String[] openAndRead(String path_to_template) throws IOException {
-
-
-        FileReader file = new FileReader(path_to_template);
-        BufferedReader varRead = new BufferedReader(file);
-
-        int num = numStrings(path_to_template);
-        String[] lines = new String[num];
-
-
-        for (int i = 0; i < num; i++) {
-            lines[i] = varRead.readLine();
-        }
-
-        varRead.close();
-        return lines;
-    }
-
-
-
-    private int numStrings(String path_to_file) throws IOException {
-
-        FileReader text = new FileReader(path_to_file);
-        BufferedReader y = new BufferedReader(text);
-
-        String one;
-        int num = 0;
-
-        while ((one = y.readLine()) != null) {
-            num++;
-        }
-        y.close();
-
-        return num;
     }
 }

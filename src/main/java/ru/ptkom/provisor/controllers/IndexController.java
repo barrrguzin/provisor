@@ -2,12 +2,8 @@ package ru.ptkom.provisor.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,10 +19,6 @@ import ru.ptkom.provisor.service.*;
 
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpUtils;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
@@ -63,30 +55,58 @@ public class IndexController {
     private RequestService requestService;
 
     @Autowired
-    private ReadFileService readFileService;
+    private ConfigFileService configFileService;
+
+    @Autowired
+    private NetworkService networkService;
 
 
-    @GetMapping("/ping")
-    public String testPing(){
+//    @GetMapping("/ping")
+//    public @ResponseBody String testPing(){
+//        String o = networkService.scanNetwork("10.60.0.0");
+//        return o;
+//    }
 
-
-        for (int i = 1; i<255; i++) {
-            String address = "10.60.0." + i;
-            boolean reachable = false;
-            try {
-                reachable = InetAddress.getByName(address).isReachable(100);
-            } catch (UnknownHostException e) {
-                throw new RuntimeException(e);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+    @GetMapping("/monitor")
+    public String testArt(Model model){
+        long time = System.currentTimeMillis();
+        String[][] ipAndMacAddresses = networkService.showActiveHosts("192.168.68.0");
+        String[] macs = new String[ipAndMacAddresses.length];
+        for (int i = 0; i < ipAndMacAddresses.length; i++) {
+            if (ipAndMacAddresses[i][1] == null) {
+                macs[i] = "";
+            } else {
+                macs[i] = ipAndMacAddresses[i][1];
             }
-            if (reachable == true){
-            System.out.println(address + " --- " + reachable);
-            }
+
         }
 
 
-        return "redirect:/";
+        long base = System.currentTimeMillis();
+        String[][] userData = pbxUserDAO.findByMacList(macs);
+        System.out.println("Base:" + (System.currentTimeMillis() - base)/1000f);
+        if (ipAndMacAddresses.length != 0) {
+            String[][] result = new String[ipAndMacAddresses.length][ipAndMacAddresses[0].length + userData[0].length];
+
+            for (int i = 0; i < result.length; i++) {
+                result[i][0] = ipAndMacAddresses[i][0];
+                result[i][1] = ipAndMacAddresses[i][1];
+                result[i][2] = userData[i][0];
+                result[i][3] = userData[i][1];
+                result[i][4] = userData[i][2];
+            }
+            System.out.println("Time:" + (System.currentTimeMillis() - time) / 1000f);
+
+            System.out.println(result);
+            model.addAttribute("hosts", result);
+            return "network/network";
+        } else {
+            String[][] result = new String[1][1];
+            result[0][0] = "IP адресов в сети не обнаружено";
+            model.addAttribute("hosts", result);
+            return "network/network";
+        }
+
     }
 
 
@@ -111,7 +131,7 @@ public class IndexController {
         String ip = requestService.getClientIp(request);
         String mac = configName.replace("spa", "").replace(".cfg", "");
         String output = "Конфиг получен: IP: " + ip + ", MAC: " + mac;
-        String response = readFileService.getConfigFile(configName);
+        String response = configFileService.getConfigFile(configName);
 
 //        if (response.length == 1) {
 //            output = "Ошибка: IP: " + ip + ", Пытался получить: " + configName + ". Файл не обнаржен.";

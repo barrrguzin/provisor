@@ -13,6 +13,8 @@ import org.springframework.web.servlet.config.annotation.*;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
+import ru.ptkom.provisor.service.NetworkService;
+import ru.ptkom.provisor.service.UdpSocketService;
 
 import java.nio.charset.Charset;
 import java.util.List;
@@ -27,6 +29,19 @@ public class SpringConfig implements WebMvcConfigurer {
     public SpringConfig(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
+
+
+    @Bean
+    public UdpSocketService sipSocketService() {
+        return new UdpSocketService();
+    }
+
+    @Bean
+    public NetworkService pingService() {
+        return new NetworkService();
+    }
+
+
 
     @Bean
     public SpringResourceTemplateResolver templateResolver() {

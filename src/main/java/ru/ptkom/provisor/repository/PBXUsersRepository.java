@@ -17,6 +17,8 @@ public interface PBXUsersRepository extends CrudRepository<PBXUser, Long> {
 
 
     PBXUser findByNumber(String number);
+    PBXUser findByMacIgnoreCase(String number);
+    //PBXUser[] findByMacIgnoreCase(String[] number);
 
     Iterable<PBXUser> findAllByOrderByNumberAsc();
     Iterable<PBXUser> findAllByOrderByNumberDesc();

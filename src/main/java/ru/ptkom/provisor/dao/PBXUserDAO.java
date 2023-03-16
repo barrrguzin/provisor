@@ -16,6 +16,27 @@ public class PBXUserDAO {
     @Autowired
     private UserRepository userRepository;
 
+
+    public String[][] findByMacList(String[] macAddresses) {
+
+        String[][] userDataList = new String[macAddresses.length][3];
+
+        for (int i = 0; i < macAddresses.length; i++) {
+            PBXUser usr = pbxUsersRepository.findByMacIgnoreCase(macAddresses[i]);
+            if (usr != null) {
+                userDataList[i][0] = usr.getName();
+                userDataList[i][1] = usr.getNumber();
+                userDataList[i][2] = usr.getPhoneModel();
+            } else {
+                userDataList[i][0] = "Пользователь не найден";
+                userDataList[i][1] = "-";
+                userDataList[i][2] = "-";
+            }
+        }
+        return userDataList;
+    }
+
+
     public Iterable<PBXUser> getAllUsers(){
         return pbxUsersRepository.findAllByOrderByNumberAsc();
     }
