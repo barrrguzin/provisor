@@ -6,10 +6,11 @@
 </head>
 <body>
 <div th:insert="~{fragments/base :: body}"></div>
+<script type="text/javascript" src="/static/src/scripts.js"></script>
 <p><a href="/">
     <button type="button" class="btn btn-outline-dark">Назад</button>
 </a></p>
-<p><a href="/network">
+<p><a href="/monitor">
     <button type="button" class="btn btn-outline-dark">Сканировать еще раз</button>
 </a></p>
 <div th:switch="${hosts[0][0]}">
@@ -22,6 +23,7 @@
                 <th>Пользователь</th>
                 <th>Номер</th>
                 <th>Модель аппарата</th>
+                <th>Заменить конфиг</th>
             </tr>
 
             <tr th:each="host : ${hosts}">
@@ -44,6 +46,17 @@
 
                 <td>
                     <a th:utext= "${host[4]}"/>
+                </td>
+
+                <td th:switch="${host[4]}">
+                    <span th:case="${'spa9XX'}">
+                        <div th:id="${host[0]}">
+                            <script th:inline="javascript">
+                                reloadConfig([[${host[0]}]], [[${host[1]}]], [[${host[4]}]], [[${host[0]}]]);
+                            </script>
+                        </div>
+                    </span>
+                    <span th:case="*" th:utext= "${'Пока не поддерживается'}"></span>
                 </td>
 
             </tr>

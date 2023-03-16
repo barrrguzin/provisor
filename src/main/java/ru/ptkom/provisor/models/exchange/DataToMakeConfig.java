@@ -1,4 +1,4 @@
-package ru.ptkom.provisor.models;
+package ru.ptkom.provisor.models.exchange;
 
 public class DataToMakeConfig {
 

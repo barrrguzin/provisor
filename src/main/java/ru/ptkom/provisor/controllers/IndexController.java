@@ -14,6 +14,8 @@ import ru.ptkom.provisor.dao.PBXUserDAO;
 import ru.ptkom.provisor.dao.UserDAO;
 import ru.ptkom.provisor.models.PBXUser;
 import ru.ptkom.provisor.models.User;
+import ru.ptkom.provisor.models.exchange.DataToMakeConfig;
+import ru.ptkom.provisor.models.exchange.DataToReloadConfig;
 import ru.ptkom.provisor.models.sipUsers.OutUsers;
 import ru.ptkom.provisor.service.*;
 
@@ -30,6 +32,7 @@ public class IndexController {
 
     private static String[] LIST_OF_MODELS_OF_PHONES_IN_COMPANY= {"spa9XX","vp5X","grandstream"};
     private static String[] LIST_OF_SUPPORTED_ROLES = {"ROLE_SUPERADMIN", "ROLE_ADMIN", "ROLE_USER"};
+    private static String SERVER_ADDRESS = "192.168.68.2";
 
 
     @Autowired
@@ -61,12 +64,6 @@ public class IndexController {
     private NetworkService networkService;
 
 
-//    @GetMapping("/ping")
-//    public @ResponseBody String testPing(){
-//        String o = networkService.scanNetwork("10.60.0.0");
-//        return o;
-//    }
-
     @GetMapping("/monitor")
     public String testArt(Model model){
         long time = System.currentTimeMillis();
@@ -90,14 +87,18 @@ public class IndexController {
 
             for (int i = 0; i < result.length; i++) {
                 result[i][0] = ipAndMacAddresses[i][0];
-                result[i][1] = ipAndMacAddresses[i][1];
                 result[i][2] = userData[i][0];
                 result[i][3] = userData[i][1];
                 result[i][4] = userData[i][2];
+                if (userData[i][2].equals("vp5X")) {
+                    //result[i][1] = ipAndMacAddresses[i][1].toUpperCase();
+                    result[i][1] = ipAndMacAddresses[i][1];
+                } else {
+                    result[i][1] = ipAndMacAddresses[i][1];
+                }
             }
             System.out.println("Time:" + (System.currentTimeMillis() - time) / 1000f);
 
-            System.out.println(result);
             model.addAttribute("hosts", result);
             return "network/network";
         } else {
@@ -110,12 +111,27 @@ public class IndexController {
     }
 
 
-    @GetMapping("/test-digest")
-    public @ResponseBody String testDigest() {
-        String uri = "http://192.168.68.11/admin/resync?";
-        ResponseEntity entity = restTemplate.exchange(uri, HttpMethod.GET, null, String.class);
-        System.out.println(entity.getStatusCode());
-        return entity.getBody().toString();
+    @PatchMapping("/reload")
+    public @ResponseBody String testDigest(@ModelAttribute("data") DataToReloadConfig data) {
+
+        String phoneIp = data.getIp();
+        String phoneMac = data.getMac();
+        String phoneModel = data.getModel();
+        String configUrl = new String();
+        if (phoneModel.equals(LIST_OF_MODELS_OF_PHONES_IN_COMPANY[0])) {
+            configUrl = "http://" + SERVER_ADDRESS + "/linksys/spa" + phoneMac + ".cfg";
+        } if (phoneModel.equals(LIST_OF_MODELS_OF_PHONES_IN_COMPANY[1])) {
+            configUrl = "http://" + SERVER_ADDRESS + "/snrvp/" + phoneMac.toUpperCase() + ".cfg";
+        }
+
+
+        String finalUrl = "http://" + phoneIp + "/admin/resync?" + configUrl;
+
+        System.out.println(finalUrl);
+
+        ResponseEntity entity = restTemplate.exchange(finalUrl, HttpMethod.GET, null, String.class);
+
+        return finalUrl + "\n" + entity.getBody().toString();
     }
 
 
@@ -132,12 +148,6 @@ public class IndexController {
         String mac = configName.replace("spa", "").replace(".cfg", "");
         String output = "Конфиг получен: IP: " + ip + ", MAC: " + mac;
         String response = configFileService.getConfigFile(configName);
-
-//        if (response.length == 1) {
-//            output = "Ошибка: IP: " + ip + ", Пытался получить: " + configName + ". Файл не обнаржен.";
-//        }
-
-
         System.out.println(output);
 
         return response;

@@ -87,17 +87,17 @@ textarea{
     background-color: #494949;
 }
 
-button{
-   border: none;
-   width: 50%;
-   height: 40px;
-   border-radius: 100px;
-   padding-left: 10px;
-   background-color: #364d60;
-   color: #ffffff;
-   margin-bottom: 0px;
-   margin-top: 0px;
-}
+/*button{*/
+/*   border: none;*/
+/*   width: 50%;*/
+/*   height: 40px;*/
+/*   border-radius: 100px;*/
+/*   padding-left: 10px;*/
+/*   background-color: #364d60;*/
+/*   color: #ffffff;*/
+/*   margin-bottom: 0px;*/
+/*   margin-top: 0px;*/
+/*}*/
 
 #look_at{
    border: none;
