@@ -64,7 +64,6 @@ public class ECSSAPIClient {
 
 
     static {
-        //works
         ApplicationContext context = new AnnotationConfigApplicationContext(PropertiesConfig.class);
         Environment config = context.getEnvironment();
 
@@ -87,27 +86,25 @@ public class ECSSAPIClient {
     }
 
 
-
     public String getListOfAliases(){
-        reAutfIfNeeded();
 
 
-        //RestTemplate restTemplate = new RestTemplate();
+        reAuthIfNeeded();
+
+
         restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8));
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.add("Cookie", TOKEN);
         HttpEntity requestEntity = new HttpEntity(LIST_OF_ALIASES_REQUEST,requestHeaders);
         ResponseEntity response = restTemplate.exchange(GET_ALIASES_URL, HttpMethod.POST, requestEntity, String.class);
 
-        return response.getBody().toString();
+
+        return String.valueOf(response.getBody());
     }
 
 
     private void getAuth(){
-
-        //RestTemplate restTemplate = new RestTemplate();
         HttpHeaders requestHeaders = new HttpHeaders();
-        //requestHeaders.add("Cookie", "token="+TOKEN);
         HttpEntity requestEntity = new HttpEntity(AUTH_REQUEST, requestHeaders);
         ResponseEntity response = restTemplate.exchange(GET_AUTH_URL, HttpMethod.POST, requestEntity, String.class);
         String token = response.getHeaders().getFirst("Set-Cookie");
@@ -117,7 +114,6 @@ public class ECSSAPIClient {
 
     private Integer getCheck(){
         int statusCode = 666;
-        //RestTemplate restTemplate = new RestTemplate();
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.add("Cookie", TOKEN);
         HttpEntity requestEntity = new HttpEntity(requestHeaders);
@@ -130,7 +126,7 @@ public class ECSSAPIClient {
     }
 
 
-    private void reAutfIfNeeded(){
+    private void reAuthIfNeeded(){
         if(TOKEN == ""){
             getAuth();
         }
@@ -140,99 +136,66 @@ public class ECSSAPIClient {
     }
 
 
-    public String getAliases(){
+    public String getAliasData(String number) {
 
 
-        reAutfIfNeeded();
-        In request = new In();
-        In.Sip sip = new In.Sip();
-        List<In.Sip> listOfSip= new ArrayList<>();
-        sip.setDomain(DOMAIN);
-        sip.setGroup(GROUP);
-        sip.setComplete(false);
-        sip.setAuth(false);
-        listOfSip.add(sip);
-        request.setSip(listOfSip);
+            reAuthIfNeeded();
+            In request = new In();
+            In.Sip sip = new In.Sip();
+            List<In.Sip> listOfSip = new ArrayList<>();
 
 
-        return sendRequest(request).getBody().toString();
+            if (number.contains("@")) {
+                sip.setId(number.toString());
+            } else {
+                sip.setId(number + "@" + DOMAIN);
+            }
+
+
+            sip.setDomain(DOMAIN);
+            sip.setGroup(GROUP);
+            sip.setComplete(true);
+            sip.setAuth(true);
+            listOfSip.add(sip);
+            request.setSip(listOfSip);
+
+
+            return sendRequest(request).getBody().toString();
     }
 
 
-public String getAliasData(String number) {
 
 
-        reAutfIfNeeded();
-        In request = new In();
-        In.Sip sip = new In.Sip();
-        List<In.Sip> listOfSip = new ArrayList<>();
+    private ResponseEntity sendRequest(In request){
 
 
-        if (number.contains("@")) {
-            sip.setId(number.toString());
-        } else {
-            sip.setId(number + "@" + DOMAIN);
+        JAXBContext jaxbContext = null;
+        try {
+            jaxbContext = JAXBContext.newInstance(In.class);
+        } catch (JAXBException e) {
+            throw new RuntimeException(e);
         }
+        Marshaller jaxbMarshaller = null;
+        try {
+            jaxbMarshaller = jaxbContext.createMarshaller();
+        } catch (JAXBException e) {
+            throw new RuntimeException(e);
+        }
+        StringWriter sw = new StringWriter();
+        try {
+            jaxbMarshaller.marshal(request, sw);
+        } catch (JAXBException e) {
+            throw new RuntimeException(e);
+        }
+        String xmlContent = sw.toString();
 
 
-        sip.setDomain(DOMAIN);
-        sip.setGroup(GROUP);
-        sip.setComplete(true);
-        sip.setAuth(true);
-        listOfSip.add(sip);
-        request.setSip(listOfSip);
-
-
-        return sendRequest(request).getBody().toString();
-}
-
-
-
-
-private ResponseEntity sendRequest(In request){
-    JAXBContext jaxbContext = null;
-    try {
-        jaxbContext = JAXBContext.newInstance(In.class);
-    } catch (JAXBException e) {
-        throw new RuntimeException(e);
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("Cookie", TOKEN);
+        HttpEntity requestEntity = new HttpEntity(xmlContent, requestHeaders);
+        ResponseEntity response = restTemplate.exchange(GET_USERS_URL, HttpMethod.POST, requestEntity, String.class);
+        return response;
     }
-    Marshaller jaxbMarshaller = null;
-    try {
-        jaxbMarshaller = jaxbContext.createMarshaller();
-    } catch (JAXBException e) {
-        throw new RuntimeException(e);
-    }
-    //jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,Boolean.TRUE);
-    StringWriter sw = new StringWriter();
-    try {
-        jaxbMarshaller.marshal(request, sw);
-    } catch (JAXBException e) {
-        throw new RuntimeException(e);
-    }
-    String xmlContent = sw.toString();
-
-
-
-    //RestTemplate restTemplate = new RestTemplate();
-    HttpHeaders requestHeaders = new HttpHeaders();
-    requestHeaders.add("Cookie", TOKEN);
-    HttpEntity requestEntity = new HttpEntity(xmlContent, requestHeaders);
-    ResponseEntity response = restTemplate.exchange(GET_USERS_URL, HttpMethod.POST, requestEntity, String.class);
-    return response;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     private static void disableSslVerification() {
@@ -273,30 +236,3 @@ private ResponseEntity sendRequest(In request){
 
 
 }
-
-
-
-//    public void getAliases(){
-//
-//
-//        In request = new In();
-//        Sip sip = new Sip();
-//        List<Sip> listOfSip= new ArrayList<>();
-//        sip.setDomain("voip.ptk.loc");
-//        sip.setGroup("*");
-//        sip.setComplete(false);
-//        listOfSip.add(sip);
-//        request.setSip(listOfSip);
-//
-//
-//        RestTemplate restTemplate = new RestTemplate();
-//        HttpHeaders requestHeaders = new HttpHeaders();
-//        requestHeaders.add("Cookie", TOKEN);
-//        HttpEntity requestEntity = new HttpEntity(request, requestHeaders);
-//        ResponseEntity response = restTemplate.exchange(GET_ALL_USERS_URL, HttpMethod.POST, requestEntity, String.class);
-//
-//
-//        String xml = (String) response.getBody();
-//        System.out.println(xml);
-//
-//    }

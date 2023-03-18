@@ -3,7 +3,7 @@ package ru.ptkom.provisor.network;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.nio.charset.StandardCharsets;
+
 
 public class Ping extends Thread{
 

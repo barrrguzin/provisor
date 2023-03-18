@@ -71,7 +71,7 @@ public class UserService implements UserDetailsService {
         Long id = oldUser.getId();
         user.setId(id);
 
-        userDAO.saveUser(user);
+        userDAO.updateUser(user);
     }
     public void updateUser(User user, String[] roles){
         if (roles != null) {
@@ -98,7 +98,7 @@ public class UserService implements UserDetailsService {
 
         user.setPbxUser(null);
 
-        userDAO.saveUser(user);
+        userDAO.updateUser(user);
     }
 
 

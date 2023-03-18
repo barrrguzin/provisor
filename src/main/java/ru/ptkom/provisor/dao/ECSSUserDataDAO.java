@@ -15,37 +15,29 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+
 @Component
 public class ECSSUserDataDAO {
+
 
     @Autowired
     private ECSSAPIClient ecssapiClient;
 
 
-    public List<List<String>> listOfAliasesNames(String xml){
-         OutAliases data = xmlToAliasesObject(xml);
-        List<List<String>> ifacesAndNames = new ArrayList<>();
+    public List<List<String>> listOfAliasesNames(){
+
+
+        String xmlListOfAliases = ecssapiClient.getListOfAliases();
+
+
+        OutAliases data = xmlToAliasesObject(xmlListOfAliases);
+        List<List<String>> numbersAndNames = new ArrayList<>();
 
         for (int index=0; index<data.getAliases().size();index++){
-            ifacesAndNames.add(new ArrayList<String>(Arrays.asList(data.getAliases().get(index).getAddress(), data.getAliases().get(index).getDisplay_name())));
+            numbersAndNames.add(new ArrayList<String>(Arrays.asList(data.getAliases().get(index).getAddress(), data.getAliases().get(index).getDisplay_name())));
         }
-        return ifacesAndNames;
+        return numbersAndNames;
     }
-
-
-    public List<List<String>> listOfAliases(String xml){
-        OutAliases data = xmlToAliasesObject(xml);
-        List<List<String>> ifacesAndNames = new ArrayList<>();
-        for (int index=0; index<data.getAliases().size();index++) {
-            String number = data.getAliases().get(index).getAddress();
-            String name = data.getAliases().get(index).getDisplay_name();
-
-
-            ifacesAndNames.add(new ArrayList<String>(Arrays.asList(number, name)));
-        }
-        return ifacesAndNames;
-    }
-
 
 
     public OutUsers.User allAliasData(String number) {
@@ -55,12 +47,9 @@ public class ECSSUserDataDAO {
     }
 
 
-
     private OutUsers  xmlToUsersObject(String xml) {
 
 
-        //sip &lt;sip
-        //sip <sip
         xml = xml.replaceAll("sip &lt;sip", "sip")
                 .replaceAll(">;", "; ");
 
@@ -77,8 +66,6 @@ public class ECSSUserDataDAO {
 
 
     private OutAliases  xmlToAliasesObject(String xml) {
-
-
         try {
             StringReader sr =new StringReader(xml);
             JAXBContext jaxbContext = JAXBContext.newInstance(OutAliases.class);
@@ -90,6 +77,4 @@ public class ECSSUserDataDAO {
         }}
 
 
-
 }
-

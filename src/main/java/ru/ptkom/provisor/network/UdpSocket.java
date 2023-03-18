@@ -1,8 +1,6 @@
 package ru.ptkom.provisor.network;
 
 
-
-
 import java.io.IOException;
 import java.net.*;
 

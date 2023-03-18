@@ -42,7 +42,15 @@ public class PBXUserDAO {
     }
 
     public void saveUser(PBXUser user){
-        pbxUsersRepository.save(user);
+
+        PBXUser checkNumber = pbxUsersRepository.findByNumber(user.getNumber());
+        PBXUser checkMac = pbxUsersRepository.findByMacIgnoreCase(user.getMac());
+
+
+        if (checkNumber == null && checkMac == null) {
+            pbxUsersRepository.save(user);
+        }
+        System.out.println("Мак или номер уже числятся за другим юзером");
     }
 
 
@@ -81,14 +89,25 @@ public class PBXUserDAO {
 
 
     public void update(PBXUser updatedUser){
+
+
         Long id = updatedUser.getId();
+
+
         PBXUser userToBeUpdated = getUserById(id);
-        pbxUsersRepository.findById(id);
         userToBeUpdated.setName(updatedUser.getName());
         userToBeUpdated.setMac(updatedUser.getMac());
         userToBeUpdated.setNumber(updatedUser.getNumber());
         userToBeUpdated.setPhoneModel(updatedUser.getPhoneModel());
-        pbxUsersRepository.save(userToBeUpdated);
+
+
+        PBXUser checkMac = pbxUsersRepository.findByMacIgnoreCase(userToBeUpdated.getMac());
+        PBXUser checkPhone = pbxUsersRepository.findByNumber(userToBeUpdated.getNumber());
+
+
+        if ((checkMac == null || checkMac.getId() == id) && (checkPhone == null || checkPhone.getId() == id)) {
+            pbxUsersRepository.save(userToBeUpdated);
+        }
     }
 
 

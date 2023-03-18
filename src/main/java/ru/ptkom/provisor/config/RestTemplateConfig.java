@@ -43,4 +43,6 @@ public class RestTemplateConfig {
         provider.setCredentials(AuthScope.ANY, credentials);
         return provider;
     }
+
+
 }

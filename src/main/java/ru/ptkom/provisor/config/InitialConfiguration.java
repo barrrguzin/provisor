@@ -8,7 +8,6 @@ import ru.ptkom.provisor.models.Role;
 import ru.ptkom.provisor.models.User;
 import ru.ptkom.provisor.repository.RoleRepository;
 import ru.ptkom.provisor.repository.UserRepository;
-import ru.ptkom.provisor.service.UdpSocketService;
 import ru.ptkom.provisor.service.UserService;
 
 import javax.annotation.PostConstruct;
@@ -18,40 +17,16 @@ import java.util.Collection;
 @Component
 public class InitialConfiguration {
 
+    @Autowired
     private UserService userService;
     @Autowired
     public void setUserService(UserService userService){
         this.userService=userService;
     }
-
     @Autowired
     private UserRepository userRepository;
     @Autowired
     private RoleRepository roleRepository;
-    @Autowired
-    private UdpSocketService udpSocketService;
-
-    @PostConstruct
-    public void setDefaultUser() {
-
-        String username = "barguzin";
-        try {
-            userService.loadUserByUsername(username);
-        } catch (UsernameNotFoundException e) {
-            // user does not exist, create a new user and save to the database
-            User user = new User();
-            user.setUsername(username);
-            user.setPassword("$2a$12$qEldoo3nfwRXQyngvsfgk.c7pRanXW7nvYBkW9iOs0sdyCnnlY2l6");
-            Collection<Role> roles = new ArrayList<Role>();
-            Role role = new Role();
-            role.setName("SUPERADMIN");
-            roles.add(role);
-            user.setRoles(roles);
-            userRepository.save(user);
-        }
-
-        System.out.println("System user set");
-    }
 
 
     @PostConstruct
@@ -81,8 +56,4 @@ public class InitialConfiguration {
     }
 
 
-    @PostConstruct
-    public void sipSocket() {
-        //udpSocketService.startUdpSocket(5060);
-    }
 }

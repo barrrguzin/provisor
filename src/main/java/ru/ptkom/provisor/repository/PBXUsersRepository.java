@@ -10,16 +10,9 @@ import ru.ptkom.provisor.models.PBXUser;
 
 public interface PBXUsersRepository extends CrudRepository<PBXUser, Long> {
 
-//    @Modifying
-//    @Transactional
-//    @Query(value = "select * from pbxuser where number = ':number'", nativeQuery = true)
-//    PBXUser findByNumber1(@Param("number") String number);
-
 
     PBXUser findByNumber(String number);
     PBXUser findByMacIgnoreCase(String number);
-    //PBXUser[] findByMacIgnoreCase(String[] number);
-
     Iterable<PBXUser> findAllByOrderByNumberAsc();
     Iterable<PBXUser> findAllByOrderByNumberDesc();
 }
