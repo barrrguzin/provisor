@@ -1,6 +1,7 @@
 package ru.ptkom.provisor.dao;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.ptkom.provisor.client.ECSSAPIClient;
@@ -16,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
+@Slf4j
 @Component
 public class ECSSUserDataDAO {
 
@@ -36,6 +38,7 @@ public class ECSSUserDataDAO {
         for (int index=0; index<data.getAliases().size();index++){
             numbersAndNames.add(new ArrayList<String>(Arrays.asList(data.getAliases().get(index).getAddress(), data.getAliases().get(index).getDisplay_name())));
         }
+        log.info("From ECSS got " + numbersAndNames.size() + " aliases (numbers and names).");
         return numbersAndNames;
     }
 
@@ -43,7 +46,9 @@ public class ECSSUserDataDAO {
     public OutUsers.User allAliasData(String number) {
         String xml = ecssapiClient.getAliasData(number);
         OutUsers data = xmlToUsersObject(xml);
-        return data.getUsers().get(0);
+        OutUsers.User alias = data.getUsers().get(0);
+        log.info("From ECSS got data about SIP account with number: " + alias.getIface() + ".");
+        return alias;
     }
 
 

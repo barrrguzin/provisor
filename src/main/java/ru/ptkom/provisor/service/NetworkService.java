@@ -1,5 +1,6 @@
 package ru.ptkom.provisor.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -10,9 +11,9 @@ import ru.ptkom.provisor.network.Ping;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
-import java.util.Arrays;
 
 
+@Slf4j
 @Service
 public class NetworkService {
 
@@ -38,12 +39,13 @@ public class NetworkService {
     public String[][] showActiveHosts(String net) {
         long bradcast = System.currentTimeMillis();
         broadcastPing(net);
-        System.out.println("Broadcast:" + (System.currentTimeMillis() - bradcast)/1000f);
+        log.debug("Broadcast finished for: " + ((System.currentTimeMillis() - bradcast)/1000f) + " seconds.");
 
 
         long scan = System.currentTimeMillis();
         int[] addressLastBytes = scanNetwork(net);
-        System.out.println("Scan:" + (System.currentTimeMillis() - scan)/1000f);
+        log.debug("Scanning finished for: " + ((System.currentTimeMillis() - scan)/1000f) + " seconds.");
+
 
 
         String[][] addressAndMacOfActiveHosts = new String[addressLastBytes.length][2];
@@ -51,7 +53,7 @@ public class NetworkService {
 
         long arp = System.currentTimeMillis();
         String[][] arpTableData = showArpTable();
-        System.out.println("ARP:" + (System.currentTimeMillis() - arp)/1000f);
+        log.debug("Got data from ARP table finished for: " + ((System.currentTimeMillis() - arp)/1000f) + " seconds.");
 
 
         net = net.substring(0, net.lastIndexOf(".")) + ".";
@@ -73,10 +75,7 @@ public class NetworkService {
         }
 
 
-        System.out.println("Parse:" + (System.currentTimeMillis() - parse)/1000f);
-        System.out.println(addressLastBytes.length);
-        System.out.println(addressAndMacOfActiveHosts.length);
-        System.out.println(Arrays.deepToString(addressAndMacOfActiveHosts));
+        log.debug("Comparing results with ARP table finished for: " + ((System.currentTimeMillis() - parse)/1000f) + " seconds.");
         return addressAndMacOfActiveHosts;
     }
 
@@ -90,7 +89,7 @@ public class NetworkService {
 
 
         Ping[] threads = setUpThreads(LAST_ADDRESS_IN_NETWORK);
-        //String[] results = new String[lastAddressInNetwork+1];
+
 
         for (int i = 1; i<(LAST_ADDRESS_IN_NETWORK+1); i++){
             String address = net + i;
@@ -99,6 +98,7 @@ public class NetworkService {
                 threads[i] = new Ping(address);
                 threads[i].start();
             } catch (UnknownHostException e) {
+                log.error("Error of setup thread: " + e);
                 throw new RuntimeException(e);
             }
         }
@@ -112,6 +112,7 @@ public class NetworkService {
                     counter++;
                 }
             } catch (InterruptedException e) {
+                log.error("Error of got result from thread: " + e);
                 throw new RuntimeException(e);
             }
         }
@@ -121,7 +122,6 @@ public class NetworkService {
         for (int i = 0; i < result.length; i++) {
             result[i] = activeAddresses[i];
         }
-        System.out.println(counter);
         counter = 0;
         return result;
     }
@@ -141,6 +141,7 @@ public class NetworkService {
                 threads[i] = new Ping(address);
                 threads[i].start();
             } catch (UnknownHostException e) {
+                log.error("Error of setup thread: " + e);
                 throw new RuntimeException(e);}}
 
 
@@ -148,6 +149,7 @@ public class NetworkService {
             try {
                 threads[i].join();
             } catch (InterruptedException e) {
+                log.error("Error of waiting to thread stop: " + e);
                 throw new RuntimeException(e);}}
     }
 
@@ -162,7 +164,6 @@ public class NetworkService {
         String[] arpTableLines = getArpTable();
         String[][] ipAndMacAddresses = new String[arpTableLines.length][2];
 
-        System.out.println(arpTableLines.length);
         for (int i = 0; i<arpTableLines.length; i++){
             ipAndMacAddresses[i][0] = arpTableLines[i].split("\\s+")[0];
             ipAndMacAddresses[i][1] = arpTableLines[i].split("\\s+")[3];
@@ -171,16 +172,7 @@ public class NetworkService {
     }
 
     private String[] getArpTable() {
-
-        String[] arpTableLines;
-
-        try {
-            arpTableLines = fileService.openAndRead(PATH_TO_ARP_TABLE);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
+        String[] arpTableLines = fileService.openAndRead(PATH_TO_ARP_TABLE);
         return arpTableLines;
-
     }
 }

@@ -1,6 +1,7 @@
 package ru.ptkom.provisor.service;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,6 +22,7 @@ import ru.ptkom.provisor.models.User;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class UserService implements UserDetailsService {
 
@@ -71,6 +73,7 @@ public class UserService implements UserDetailsService {
         Long id = oldUser.getId();
         user.setId(id);
 
+        log.debug("User " + user.getUsername() + " send to update method.");
         userDAO.updateUser(user);
     }
     public void updateUser(User user, String[] roles){
@@ -98,6 +101,7 @@ public class UserService implements UserDetailsService {
 
         user.setPbxUser(null);
 
+        log.debug("User " + user.getUsername() + " send to update method.");
         userDAO.updateUser(user);
     }
 
@@ -117,6 +121,8 @@ public class UserService implements UserDetailsService {
 
         user.setPbxUser(pbxUserDAO.getUserByNumber(number));
         user.setPassword(passwordEncoder.encode(password));
+        log.debug("Password to " + user.getUsername() + " encoded.");
+        log.debug("User " + user.getUsername() + " send to add method.");
         userDAO.saveUser(user);
     }
 
@@ -141,6 +147,4 @@ public class UserService implements UserDetailsService {
     }
 
 
-
-    }
-
+}

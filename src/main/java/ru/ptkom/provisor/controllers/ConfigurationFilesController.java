@@ -1,6 +1,7 @@
 package ru.ptkom.provisor.controllers;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,7 +9,12 @@ import org.springframework.web.bind.annotation.*;
 import ru.ptkom.provisor.dao.PBXUserDAO;
 import ru.ptkom.provisor.service.ConfigGeneratorForSNRVP5x;
 import ru.ptkom.provisor.service.ConfigGeneratorForSPA9xx;
+import ru.ptkom.provisor.service.RequestService;
 
+import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
+
+@Slf4j
 @Controller
 public class ConfigurationFilesController {
 
@@ -19,10 +25,13 @@ public class ConfigurationFilesController {
     private ConfigGeneratorForSPA9xx configGeneratorForSPA9xx;
     @Autowired
     private ConfigGeneratorForSNRVP5x configGeneratorForSNRVP5x;
+    @Autowired
+    private RequestService requestService;
 
 
     @GetMapping("/config/make")
-    public String takeDataToMakeConfigToSPA9xx(Model model) {
+    public String takeDataToMakeConfigToSPA9xx(Model model, Principal principal, HttpServletRequest request) {
+        log.info("User: " + principal.getName() + "; From: " + requestService.getClientIp(request) + "; Try to get page: " + request.getRequestURI());
         model.addAttribute("number", "");
         model.addAttribute("result", "");
         return "phone/make";
@@ -30,7 +39,8 @@ public class ConfigurationFilesController {
 
 
     @PostMapping("/config/make")
-    public @ResponseBody String makeConfigPhoneApparation(@RequestParam String number, Model model) {
+    public @ResponseBody String makeConfigPhoneApparation(@RequestParam String number, Model model, Principal principal, HttpServletRequest request) {
+        log.info("User: " + principal.getName() + "; From: " + requestService.getClientIp(request) + "; Try to send POST request: " + request.getRequestURI());
 
 
         String result = "Произошла ошибка(";
@@ -75,8 +85,6 @@ public class ConfigurationFilesController {
             return "phone/make";
         }
     }
-
-
 
 
 }

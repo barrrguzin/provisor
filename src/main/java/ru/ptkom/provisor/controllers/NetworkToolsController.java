@@ -1,14 +1,21 @@
 package ru.ptkom.provisor.controllers;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import ru.ptkom.provisor.dao.PBXUserDAO;
 import ru.ptkom.provisor.service.NetworkService;
+import ru.ptkom.provisor.service.RequestService;
+
+import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 
 
+@Slf4j
 @Controller
 public class NetworkToolsController {
 
@@ -17,14 +24,22 @@ public class NetworkToolsController {
     private NetworkService networkService;
     @Autowired
     private PBXUserDAO pbxUserDAO;
+    @Autowired
+    private RequestService requestService;
 
 
     private static String SERVER_ADDRESS = "192.168.68.2";
 
 
     @GetMapping("/monitor")
-    public String testArt(Model model) {
+    public String testArt(Model model, Principal principal, HttpServletRequest request) {
+        log.info("User: " + principal.getName() + "; From: " + requestService.getClientIp(request) + "; Try to get page: " + request.getRequestURI());
+        long scanStartTime = System.currentTimeMillis();
         String[][] ipAndMacAddresses = networkService.showActiveHosts(SERVER_ADDRESS);
+        log.info("Network scanning is done for " + ((System.currentTimeMillis()-scanStartTime)/1000f) + " seconds. "
+                + ipAndMacAddresses.length + " hosts found in network: " + SERVER_ADDRESS + ".");
+
+
         String[] macs = new String[ipAndMacAddresses.length];
 
 
@@ -54,11 +69,13 @@ public class NetworkToolsController {
                 }
             }
             model.addAttribute("hosts", result);
+            log.info("Compare user and found MAC addresses. Return page with this.");
             return "network/network";
         } else {
             String[][] result = new String[1][1];
             result[0][0] = "IP адресов в сети не обнаружено";
             model.addAttribute("hosts", result);
+            log.info("No one host spot. Return page with this.");
             return "network/network";
         }
     }

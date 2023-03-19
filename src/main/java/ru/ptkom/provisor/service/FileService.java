@@ -1,30 +1,55 @@
 package ru.ptkom.provisor.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+@Slf4j
 @Service
 public class FileService {
 
 
-    public String[] openAndRead(String pathToFile) throws IOException {
+    public String[] openAndRead(String pathToFile) {
 
 
-        FileReader file = new FileReader(pathToFile);
+        FileReader file = null;
+        try {
+            file = new FileReader(pathToFile);
+        } catch (FileNotFoundException e) {
+            log.error("Can't read file: (" + pathToFile + "). Error: " + e);
+            throw new RuntimeException(e);
+        }
         BufferedReader varRead = new BufferedReader(file);
 
-        int num = numStrings(pathToFile);
+        int num = 0;
+        try {
+            num = numStrings(pathToFile);
+        } catch (IOException e) {
+            log.error("Can't read file: (" + pathToFile + "). Error: " + e);
+            throw new RuntimeException(e);
+        }
         String[] lines = new String[num];
 
 
         for (int i = 0; i < num; i++) {
-            lines[i] = varRead.readLine();
+            try {
+                lines[i] = varRead.readLine();
+            } catch (IOException e) {
+                log.error("Can't read line from file (" + pathToFile + "). Error: " + e);
+                throw new RuntimeException(e);
+            }
         }
 
-        varRead.close();
+        try {
+            varRead.close();
+        } catch (IOException e) {
+            log.error("Can't close file (" + pathToFile + "). Error: " + e);
+            throw new RuntimeException(e);
+        }
         return lines;
     }
 

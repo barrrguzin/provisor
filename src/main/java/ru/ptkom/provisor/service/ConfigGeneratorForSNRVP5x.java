@@ -1,5 +1,6 @@
 package ru.ptkom.provisor.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -9,11 +10,11 @@ import ru.ptkom.provisor.config.PropertiesConfig;
 import ru.ptkom.provisor.dao.ECSSUserDataDAO;
 import ru.ptkom.provisor.models.sipUsers.OutUsers;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
+
 import java.io.FileWriter;
 import java.io.IOException;
 
+@Slf4j
 @Component
 public class ConfigGeneratorForSNRVP5x {
 
@@ -72,6 +73,7 @@ public class ConfigGeneratorForSNRVP5x {
             configFile.flush();
             configFile.close();
         } catch (IOException e) {
+            log.error("Can't save configuration file for VP5X (" + PATH_TO_READY_CONFIG_FILES + "spa" + mac_address + ".cfg" + "). Error: " + e);
             throw new RuntimeException(e);
         }
 
@@ -80,15 +82,12 @@ public class ConfigGeneratorForSNRVP5x {
 
 
     public String configGenerator(String login, String password, String username, String display_name) {
-        String[] template = new String[0];
+
+
         String config = new String();
 
 
-        try {
-            template = fileService.openAndRead(PATH_TO_TEMPLATE);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        String[] template = fileService.openAndRead(PATH_TO_TEMPLATE);
 
 
         for (String line : template) {

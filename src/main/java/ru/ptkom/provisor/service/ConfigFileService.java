@@ -7,7 +7,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import ru.ptkom.provisor.config.PropertiesConfig;
 
-import java.io.IOException;
 
 @Service
 public class ConfigFileService {
@@ -34,15 +33,13 @@ public class ConfigFileService {
 
 
     public String getConfigFile(String configName) {
-        String[] configStrings = new String[1];
 
-        try {
-            configStrings = fileService.openAndRead(PATH_TO_READY_CONFIG_FILES + "/" + configName);
-        } catch (IOException e) {
-            configStrings[0] = "Что-то тут не так...";
-        }
+
+        String[] configStrings = fileService.openAndRead(PATH_TO_READY_CONFIG_FILES + "/" + configName);
+
 
         StringBuilder config = new StringBuilder();
+
 
         for (int i = 0; i < configStrings.length; i++) {
             config.append(configStrings[i]).append(System.lineSeparator());
@@ -50,5 +47,4 @@ public class ConfigFileService {
 
         return config.toString();
     }
-
 }

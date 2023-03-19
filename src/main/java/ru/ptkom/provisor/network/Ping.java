@@ -16,6 +16,7 @@ public class Ping extends Thread{
 
     public void run() {
 
+
         reachable = false;
         //long start = System.currentTimeMillis();
 

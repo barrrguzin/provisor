@@ -1,5 +1,6 @@
 package ru.ptkom.provisor.controllers;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpMethod;
@@ -11,7 +12,10 @@ import ru.ptkom.provisor.service.ConfigFileService;
 import ru.ptkom.provisor.service.RequestService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 
+
+@Slf4j
 @RestController
 public class ProvisionController {
 
@@ -32,7 +36,8 @@ public class ProvisionController {
 
 
     @GetMapping("/linksys/{configName}")
-    public String addressesControl(@PathVariable("configName") String configName, HttpServletRequest request){
+    public String addressesControl(@PathVariable("configName") String configName, Principal principal, HttpServletRequest request){
+        log.info("User: " + principal.getName() + "; From: " + requestService.getClientIp(request) + "; Try to get page: " + request.getRequestURI());
 
 
         String ip = requestService.getClientIp(request);
@@ -46,7 +51,8 @@ public class ProvisionController {
 
 
     @PatchMapping("/reload")
-    public String testDigest(@ModelAttribute("data") DataToReloadConfig data) {
+    public String testDigest(@ModelAttribute("data") DataToReloadConfig data, Principal principal, HttpServletRequest request) {
+        log.info("User: " + principal.getName() + "; From: " + requestService.getClientIp(request) + "; Try to send PATCH request to page: " + request.getRequestURI());
 
 
         String phoneIp = data.getIp();
