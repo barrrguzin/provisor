@@ -1,19 +1,18 @@
 package ru.ptkom.provisor.config;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import ru.ptkom.provisor.models.Role;
-import ru.ptkom.provisor.models.User;
 import ru.ptkom.provisor.repository.RoleRepository;
 import ru.ptkom.provisor.repository.UserRepository;
 import ru.ptkom.provisor.service.UserService;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.Collection;
 
+
+@Slf4j
 @Component
 public class InitialConfiguration {
 
@@ -52,7 +51,7 @@ public class InitialConfiguration {
         }
 
 
-        System.out.println("System roles set");
+        log.info("Checked and set up a default roles.");
     }
 
 
