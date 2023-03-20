@@ -35,3 +35,24 @@ function reloadConfig(ip, mac, model, id) {
 
     document.getElementById(id).appendChild(form);
 }
+
+
+function generateConfig(number, id) {
+    let form = document.createElement('form');
+    form.method = 'post';
+    form.action = '/config/make';
+
+    let numberInput = document.createElement('input');
+    numberInput.type = 'hidden';
+    numberInput.name = 'number';
+    numberInput.value = number;
+    form.appendChild(numberInput);
+
+    let button = document.createElement('button');
+    button.type = 'submit';
+    button.class = "btn btn-outline-warning";
+    button.innerText = 'Сгенерировать конфиг';
+    form.appendChild(button);
+
+    document.getElementById(id).appendChild(form);
+}

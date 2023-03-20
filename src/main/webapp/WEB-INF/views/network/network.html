@@ -53,10 +53,18 @@
                         <div th:id="${host[0]}">
                             <script th:inline="javascript">
                                 reloadConfig([[${host[0]}]], [[${host[1]}]], [[${host[4]}]], [[${host[0]}]]);
+                                generateConfig([[${host[3]}]], [[${host[0]}]]);
                             </script>
                         </div>
                     </span>
-                    <span th:case="*" th:utext= "${'Пока не поддерживается'}"></span>
+                    <span th:case="${'vp5X'}">
+                        <div th:id="${host[0]}">
+                            <script th:inline="javascript">
+                                generateConfig([[${host[3]}]], [[${host[0]}]]);
+                            </script>
+                        </div>
+                    </span>
+                    <span th:case="*" th:utext= "${'Действие не определено'}"></span>
                 </td>
 
             </tr>

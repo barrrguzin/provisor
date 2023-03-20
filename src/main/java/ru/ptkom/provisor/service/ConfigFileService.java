@@ -17,7 +17,8 @@ public class ConfigFileService {
 
     private static final String PATH_TO_INIT_CONFIG;
     private static final String PATH_TO_TEMPLATE;
-    private static final String PATH_TO_READY_CONFIG_FILES;
+    private static final String PATH_TO_READY_SPA9XX_CONFIG_FILES;
+    private static final String PATH_TO_READY_SNRVP5X_CONFIG_FILES;
 
 
     static {
@@ -26,16 +27,34 @@ public class ConfigFileService {
         Environment config = context.getEnvironment();
 
         PATH_TO_TEMPLATE = config.getProperty("path.spa.templ");
-        PATH_TO_READY_CONFIG_FILES = config.getProperty("path.spa.confs");
+        PATH_TO_READY_SPA9XX_CONFIG_FILES = config.getProperty("path.spa.confs");
+        PATH_TO_READY_SNRVP5X_CONFIG_FILES = config.getProperty("path.snrvp.confs");
         PATH_TO_INIT_CONFIG = config.getProperty("path.spa.init");
     }
 
 
 
-    public String getConfigFile(String configName) {
+    public String getConfigFileSPA9XX(String configName) {
 
 
-        String[] configStrings = fileService.openAndRead(PATH_TO_READY_CONFIG_FILES + "/" + configName);
+        String[] configStrings = fileService.openAndRead(PATH_TO_READY_SPA9XX_CONFIG_FILES + "/" + configName);
+
+
+        StringBuilder config = new StringBuilder();
+
+
+        for (int i = 0; i < configStrings.length; i++) {
+            config.append(configStrings[i]).append(System.lineSeparator());
+        }
+
+        return config.toString();
+    }
+
+
+    public String getConfigFileSNRVP5X(String configName) {
+
+
+        String[] configStrings = fileService.openAndRead(PATH_TO_READY_SNRVP5X_CONFIG_FILES + "/" + configName);
 
 
         StringBuilder config = new StringBuilder();

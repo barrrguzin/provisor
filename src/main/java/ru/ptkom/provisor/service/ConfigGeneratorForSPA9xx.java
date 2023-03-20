@@ -72,7 +72,7 @@ public class ConfigGeneratorForSPA9xx {
             configFile.write(config);
             configFile.flush();
             configFile.close();
-
+            log.info("Configuration file created for SPA9XX (" + PATH_TO_READY_CONFIG_FILES + "spa" + mac_address + ".cfg" + "), with number:" + number + ".");
         } catch (IOException e) {
             log.error("Can't save configuration file for SPA9XX (" + PATH_TO_READY_CONFIG_FILES + "spa" + mac_address + ".cfg" + "). Error: " + e);
             throw new RuntimeException(e);
@@ -82,7 +82,7 @@ public class ConfigGeneratorForSPA9xx {
 
 
 
-    public String configGenerator(String login, String password, String username, String display_name) {
+    private String configGenerator(String login, String password, String username, String display_name) {
 
 
         String config = new String();

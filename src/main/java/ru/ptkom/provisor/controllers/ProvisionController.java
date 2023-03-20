@@ -36,14 +36,29 @@ public class ProvisionController {
 
 
     @GetMapping("/linksys/{configName}")
-    public String addressesControl(@PathVariable("configName") String configName, Principal principal, HttpServletRequest request){
-        log.info("User: " + principal.getName() + "; From: " + requestService.getClientIp(request) + "; Try to get page: " + request.getRequestURI());
-
-
+    public String giveConfigToSPA9XX(@PathVariable("configName") String configName, HttpServletRequest request){
         String ip = requestService.getClientIp(request);
         String mac = configName.replace("spa", "").replace(".cfg", "");
+
+        log.info("Request configuration file for Lynksys SPA9XX by: " + ip + "; " + mac + ";");
+
         //String output = "Запрос на получение конфига от: IP: " + ip + ", MAC: " + mac;
-        String configuration = configFileService.getConfigFile(configName);
+        String configuration = configFileService.getConfigFileSPA9XX(configName);
+
+
+        return configuration;
+    }
+
+
+    @GetMapping("/spa-vp/{configName}")
+    public String giveConfigToSNRVP5X(@PathVariable("configName") String configName, HttpServletRequest request){
+        String ip = requestService.getClientIp(request);
+        String mac = configName.replace(".cfg", "");
+
+        log.info("Request configuration file for SNR VP-5X by: " + ip + "; " + mac + ";");
+
+        //String output = "Запрос на получение конфига от: IP: " + ip + ", MAC: " + mac;
+        String configuration = configFileService.getConfigFileSNRVP5X(configName);
 
 
         return configuration;
@@ -51,7 +66,7 @@ public class ProvisionController {
 
 
     @PatchMapping("/reload")
-    public String testDigest(@ModelAttribute("data") DataToReloadConfig data, Principal principal, HttpServletRequest request) {
+    public String requestReloadFromSPA9XX(@ModelAttribute("data") DataToReloadConfig data, Principal principal, HttpServletRequest request) {
         log.info("User: " + principal.getName() + "; From: " + requestService.getClientIp(request) + "; Try to send PATCH request to page: " + request.getRequestURI());
 
 

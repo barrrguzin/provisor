@@ -30,7 +30,7 @@ public class ConfigurationFilesController {
 
 
     @GetMapping("/config/make")
-    public String takeDataToMakeConfigToSPA9xx(Model model, Principal principal, HttpServletRequest request) {
+    public String takeDataToMakeConfig(Model model, Principal principal, HttpServletRequest request) {
         log.info("User: " + principal.getName() + "; From: " + requestService.getClientIp(request) + "; Try to get page: " + request.getRequestURI());
         model.addAttribute("number", "");
         model.addAttribute("result", "");
@@ -39,7 +39,7 @@ public class ConfigurationFilesController {
 
 
     @PostMapping("/config/make")
-    public @ResponseBody String makeConfigPhoneApparation(@RequestParam String number, Model model, Principal principal, HttpServletRequest request) {
+    public String makeConfigPhoneApparation(@RequestParam String number, Model model, Principal principal, HttpServletRequest request) {
         log.info("User: " + principal.getName() + "; From: " + requestService.getClientIp(request) + "; Try to send POST request: " + request.getRequestURI());
 
 

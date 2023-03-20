@@ -7,6 +7,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.ptkom.provisor.dao.PBXUserDAO;
 import ru.ptkom.provisor.models.PBXUser;
+import ru.ptkom.provisor.service.ConfigGeneratorForSNRVP5x;
+import ru.ptkom.provisor.service.ConfigGeneratorForSPA9xx;
 import ru.ptkom.provisor.service.RequestService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +25,10 @@ public class PhoneUsersController {
     private PBXUserDAO pbxUserDAO;
     @Autowired
     private RequestService requestService;
+    @Autowired
+    private ConfigGeneratorForSPA9xx configGeneratorForSPA9xx;
+    @Autowired
+    private ConfigGeneratorForSNRVP5x configGeneratorForSNRVP5x;
 
 
     private static String[] LIST_OF_MODELS_OF_PHONES_IN_COMPANY= {"spa9XX","vp5X","grandstream"};
@@ -60,6 +66,11 @@ public class PhoneUsersController {
     public String updateWorkersData(@ModelAttribute("user") PBXUser user, Principal principal, HttpServletRequest request){
         log.info("User: " + principal.getName() + "; From: " + requestService.getClientIp(request) + "; Try to send PATCH request to page: " + request.getRequestURI());
         pbxUserDAO.update(user);
+        if (user.getPhoneModel().equals(LIST_OF_MODELS_OF_PHONES_IN_COMPANY[0])) {
+            configGeneratorForSPA9xx.generateConfigFile(user.getNumber(), user.getMac());
+        } else if (user.getPhoneModel().equals(LIST_OF_MODELS_OF_PHONES_IN_COMPANY[1])) {
+            configGeneratorForSNRVP5x.generateConfigFile(user.getNumber(), user.getMac());
+        }
         return "redirect:/workers";
     }
 
@@ -93,6 +104,11 @@ public class PhoneUsersController {
         pbxUserDAO.saveUser(user);
         Iterable<PBXUser> users = pbxUserDAO.getAllUsers();
         model.put("users", users);
+        if (user.getPhoneModel().equals(LIST_OF_MODELS_OF_PHONES_IN_COMPANY[0])) {
+            configGeneratorForSPA9xx.generateConfigFile(user.getNumber(), user.getMac());
+        } else if (user.getPhoneModel().equals(LIST_OF_MODELS_OF_PHONES_IN_COMPANY[1])) {
+            configGeneratorForSNRVP5x.generateConfigFile(user.getNumber(), user.getMac());
+        }
         return "redirect:/workers";
     }
 }
