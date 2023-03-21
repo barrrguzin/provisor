@@ -28,7 +28,7 @@ public class UsersController {
     private RequestService requestService;
 
 
-    private static String[] LIST_OF_SUPPORTED_ROLES = {"ROLE_SUPERADMIN", "ROLE_ADMIN", "ROLE_USER"};
+    private static final String[] LIST_OF_SUPPORTED_ROLES = {"ROLE_SUPERADMIN", "ROLE_ADMIN", "ROLE_USER"};
 
 
     @GetMapping("/users")

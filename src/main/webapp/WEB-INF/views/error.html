@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title th:text="${error[0]}"></title>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      text-align: center;
+      font-size: 1.2em;
+    }
+
+    img {
+      display: block;
+      margin: 0 auto;
+      padding-top: 50px;
+      max-width: 100%;
+      height: auto;
+    }
+
+    h1 {
+      font-size: 3em;
+      margin-top: 50px;
+    }
+
+    p {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+<img src="/static/img/error.jpg" alt="error">
+<h1 th:text="${error[0]}"></h1>
+<p th:text="${error[1]}"></p>
+</body>
+</html>

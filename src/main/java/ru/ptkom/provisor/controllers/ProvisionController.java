@@ -29,8 +29,8 @@ public class ProvisionController {
     private ConfigFileService configFileService;
 
 
-    private static String[] LIST_OF_MODELS_OF_PHONES_IN_COMPANY= {"spa9XX","vp5X","grandstream"};
-    private static String SERVER_ADDRESS = "192.168.68.2";
+    private static final String[] LIST_OF_MODELS_OF_PHONES_IN_COMPANY= {"spa9XX","vp5X","grandstream"};
+    private static final String SERVER_ADDRESS = "192.168.68.2";
 
 
 

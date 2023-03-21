@@ -7,12 +7,23 @@
 <body>
 <div th:insert="~{fragments/base :: body}"></div>
 <script type="text/javascript" src="/static/src/scripts.js"></script>
+<div>
 <p><a href="/">
     <button type="button" class="btn btn-outline-dark">Назад</button>
 </a></p>
+</div>
+<div>
 <p><a href="/monitor">
     <button type="button" class="btn btn-outline-dark">Сканировать еще раз</button>
 </a></p>
+</div>
+<div class="float-right">
+    <embed id="result" src="http://localhost:8080/reload"/>
+    <script>
+        let iframe = document.getElementById('result');
+        iframe.src = '/reload';
+    </script>
+</div>
 <div th:switch="${hosts[0][0]}">
     <span th:case="${'IP адресов в сети не обнаружено'}" th:utext= "${'IP адресов в сети не обнаружено'}"></span>
     <span th:case="*">

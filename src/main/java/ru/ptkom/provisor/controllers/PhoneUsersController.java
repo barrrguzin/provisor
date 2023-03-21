@@ -31,7 +31,7 @@ public class PhoneUsersController {
     private ConfigGeneratorForSNRVP5x configGeneratorForSNRVP5x;
 
 
-    private static String[] LIST_OF_MODELS_OF_PHONES_IN_COMPANY= {"spa9XX","vp5X","grandstream"};
+    private static final String[] LIST_OF_MODELS_OF_PHONES_IN_COMPANY= {"spa9XX","vp5X","grandstream"};
 
 
     @GetMapping("/workers")

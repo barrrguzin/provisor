@@ -18,8 +18,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.firewall.HttpFirewall;
+import org.springframework.security.web.firewall.StrictHttpFirewall;
 import ru.ptkom.provisor.service.UserService;
 
+import javax.servlet.http.HttpFilter;
 import java.util.Properties;
 
 
@@ -39,10 +42,12 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable().authorizeHttpRequests()
+        http.csrf().disable()
+                .authorizeHttpRequests()
                 .antMatchers("/static/css/other.css").permitAll()
                 .antMatchers("/static/css/sing.css").permitAll()
                 .antMatchers("/static/img/icon.ico").permitAll()
+                .antMatchers("/static/img/error.jpg").permitAll()
                 .antMatchers("/static/**").authenticated()
                 .antMatchers("/").authenticated()
                 .antMatchers("/aliases/**").hasAnyRole("ADMIN", "SUPERADMIN")
@@ -56,6 +61,14 @@ public class WebSecurityConfig {
                 .rememberMe().key("uniqueAndSecret");
 
         return http.build();
+    }
+
+
+    @Bean
+    public HttpFirewall httpFirewall() {
+        StrictHttpFirewall strictHttpFirewall = new StrictHttpFirewall();
+        strictHttpFirewall.setAllowUrlEncodedDoubleSlash(true);
+        return strictHttpFirewall;
     }
 
 
