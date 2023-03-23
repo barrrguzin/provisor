@@ -16,22 +16,21 @@
         <span class="nav-item">SIP-смотритель</span>
       </a>
 
-      <ul class="nav nav-pills">
-        <li class="nav-item"><a color="#EDB749" href="/" class="nav-link active" aria-current="page">Главная</a></li>
-        <li class="nav-item"><a color="#EDB749" href="/workers" class="nav-link">Список пользователей</a></li>
-        <li class="nav-item"><a href="/config/make" class="nav-link">Сгенерировать конфиг</a></li>
-        <li class="nav-item"><a href="https://orc.stl.ru" class="nav-link">АСР</a></li>
-        <li class="nav-item"><a href="/manager/html" class="nav-link">О программе</a></li>
-          <li class="nav-item"><a href="/logout" class="nav-link">Выход</a></li>
+      <ul class="nav nav-pills btn-outline-warning">
+        <li class="nav-item"><a color="#EDB749" href="/" class="nav-link bg-warning text-black" aria-current="page">Главная</a></li>
+        <li class="nav-item"><a color="#EDB749" href="/workers" class="nav-link text-black">Список пользователей</a></li>
+        <li class="nav-item"><a href="/config/make" class="nav-link text-black">Сгенерировать конфиг</a></li>
+        <li class="nav-item"><a href="https://orc.stl.ru" class="nav-link text-black">АСР</a></li>
+        <li class="nav-item"><a href="/manager/html" class="nav-link text-black">О программе</a></li>
+          <li class="nav-item"><a href="/logout" class="nav-link text-black">Выход</a></li>
       </ul>
 </header>
 </th:block>
 
 
 <th:block xmlns:th="http://www.thymeleaf.org" th:fragment="body">
-    <link rel = "stylesheet" th:href = "@{/static/css/style.css}">
-<!--    <link rel = "stylesheet" th:href = "@{/static/css/tables.css}">-->
-    <link th:href="@{/static/css/other.css}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/static/css/style.css}">
+    <link rel="stylesheet" th:href="@{/static/css/other.css}">
 </th:block>
 
 

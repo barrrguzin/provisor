@@ -8,7 +8,20 @@
 <div th:insert="~{fragments/base :: body}"></div>
 <h1>Введите данные для генерации конфиг файлы:</h1>
 
-<form th:acttion="@{/spa9xx/make-config}" th:method="post">
+
+<iframe id="update" name="update" style="display: none"></iframe>
+    <script>
+        const iframe = document.getElementById('update');
+        iframe.addEventListener('load', function () {
+            let responseText = iframe.contentDocument.body.textContent;
+            if (responseText != null && responseText != '') {
+                alert(responseText);
+            }
+        });
+    </script>
+
+
+<form acttion="/config/make" target="update" th:method="post">
     <table>
         <tr>
             <th>

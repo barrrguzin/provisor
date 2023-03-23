@@ -7,23 +7,31 @@
 <body>
 <div th:insert="~{fragments/base :: body}"></div>
 <script type="text/javascript" src="/static/src/scripts.js"></script>
-<div>
-<p><a href="/">
-    <button type="button" class="btn btn-outline-dark">Назад</button>
-</a></p>
+<div class="btn-group btn btn-outline-dark">
+<a href="/">
+    <button type="button" class="btn btn-outline-warning">Назад</button>
+</a>
+
+<a href="/monitor">
+    <button type="button" class="btn btn-outline-warning">Сканировать еще раз</button>
+</a>
 </div>
-<div>
-<p><a href="/monitor">
-    <button type="button" class="btn btn-outline-dark">Сканировать еще раз</button>
-</a></p>
-</div>
-<div class="float-right">
-    <embed id="result" src="http://localhost:8080/reload"/>
+
+
+
+<iframe id="update" name="update" style="display: none"></iframe>
     <script>
-        let iframe = document.getElementById('result');
-        iframe.src = '/reload';
+        const iframe = document.getElementById('update');
+        iframe.addEventListener('load', function () {
+            let responseText = iframe.contentDocument.body.textContent;
+            if (responseText != null && responseText != '') {
+                alert(responseText);
+            }
+        });
     </script>
-</div>
+
+
+
 <div th:switch="${hosts[0][0]}">
     <span th:case="${'IP адресов в сети не обнаружено'}" th:utext= "${'IP адресов в сети не обнаружено'}"></span>
     <span th:case="*">
@@ -61,7 +69,7 @@
 
                 <td th:switch="${host[4]}">
                     <span th:case="${'spa9XX'}">
-                        <div th:id="${host[0]}">
+                        <div th:id="${host[0]}" class="btn-group">
                             <script th:inline="javascript">
                                 reloadConfig([[${host[0]}]], [[${host[1]}]], [[${host[4]}]], [[${host[0]}]]);
                                 generateConfig([[${host[3]}]], [[${host[0]}]]);
@@ -69,7 +77,7 @@
                         </div>
                     </span>
                     <span th:case="${'vp5X'}">
-                        <div th:id="${host[0]}">
+                        <div th:id="${host[0]}" class="btn-group btn btn-outline-dark">
                             <script th:inline="javascript">
                                 generateConfig([[${host[3]}]], [[${host[0]}]]);
                             </script>

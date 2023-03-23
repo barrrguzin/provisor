@@ -1,7 +1,9 @@
 function reloadConfig(ip, mac, model, id) {
+
     let form = document.createElement('form');
     form.method = 'post';
     form.action = '/reload';
+    form.target = 'update';
 
     let methodInput = document.createElement('input');
     methodInput.type = 'hidden';
@@ -29,11 +31,12 @@ function reloadConfig(ip, mac, model, id) {
 
     let button = document.createElement('button');
     button.type = 'submit';
-    button.class = "btn btn-outline-warning";
+    button.className = "btn btn-outline-warning";
     button.innerText = 'Залить конфиг';
     form.appendChild(button);
 
     document.getElementById(id).appendChild(form);
+
 }
 
 
@@ -41,6 +44,7 @@ function generateConfig(number, id) {
     let form = document.createElement('form');
     form.method = 'post';
     form.action = '/config/make';
+    form.target = 'update';
 
     let numberInput = document.createElement('input');
     numberInput.type = 'hidden';
@@ -50,9 +54,26 @@ function generateConfig(number, id) {
 
     let button = document.createElement('button');
     button.type = 'submit';
-    button.class = "btn btn-outline-warning";
+    button.className = "btn btn-outline-warning";
     button.innerText = 'Сгенерировать конфиг';
     form.appendChild(button);
 
     document.getElementById(id).appendChild(form);
+}
+
+function createListener(id, frameId) {
+    let iframe = document.createElement('iframe');
+    iframe.id = frameId;
+    iframe.name = 'frame';
+    iframe.style = 'display: none';
+    document.getElementById(id).appendChild(iframe);
+}
+
+
+function showResult(frameId) {
+    var iframe = document.getElementById(frameId);
+    iframe.addEventListener('load', function () {
+        var responseText = iframe.contentDocument.body.textContent;
+        alert(responseText);
+    });
 }

@@ -7,6 +7,16 @@
 <body>
 <div th:insert="~{fragments/base :: body}"></div>
 
+<div class="btn-group btn btn-outline-dark">
+    <a th:href="@{/users/{id}/edit(id=${user.getId()})}">
+        <button type="button" class="btn btn-outline-warning">Изменить</button>
+    </a>
+
+    <a href="/users">
+        <button type="button" class="btn btn-outline-warning">Назад</button>
+    </a>
+</div>
+
 <table class="table table-hover">
 
     <tr>
@@ -70,14 +80,6 @@
         </td>
     </tr>
 </table>
-
-<p><a th:href="@{/users/{id}/edit(id=${user.getId()})}">
-    <button type="button" class="btn btn-outline-warning">Изменить</button>
-</a></p>
-
-<p><a href="/users">
-    <button type="button" class="btn btn-outline-dark">Назад</button>
-</a></p>
 
 </body>
 </html>

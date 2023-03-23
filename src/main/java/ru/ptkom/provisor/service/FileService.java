@@ -15,58 +15,47 @@ public class FileService {
 
     public String[] openAndRead(String pathToFile) {
 
-
-        FileReader file = null;
+        String[] lines;
         try {
-            file = new FileReader(pathToFile);
-        } catch (FileNotFoundException e) {
-            log.error("Can't read file: (" + pathToFile + "). Error: " + e);
-            throw new RuntimeException(e);
-        }
-        BufferedReader varRead = new BufferedReader(file);
 
-        int num = 0;
-        try {
-            num = numStrings(pathToFile);
-        } catch (IOException e) {
-            log.error("Can't read file: (" + pathToFile + "). Error: " + e);
-            throw new RuntimeException(e);
-        }
-        String[] lines = new String[num];
+            FileReader file = new FileReader(pathToFile);
+            BufferedReader varRead = new BufferedReader(file);
+            int num = numStrings(pathToFile);
+            lines = new String[num];
 
 
-        for (int i = 0; i < num; i++) {
-            try {
+            for (int i = 0; i < num; i++) {
                 lines[i] = varRead.readLine();
-            } catch (IOException e) {
-                log.error("Can't read line from file (" + pathToFile + "). Error: " + e);
-                throw new RuntimeException(e);
             }
-        }
 
-        try {
+
             varRead.close();
         } catch (IOException e) {
-            log.error("Can't close file (" + pathToFile + "). Error: " + e);
+            log.error("Can't read file: (" + pathToFile + "). Error: " + e);
             throw new RuntimeException(e);
         }
         return lines;
     }
+
 
     private int numStrings(String pathToFile) throws IOException {
 
         FileReader text = new FileReader(pathToFile);
         BufferedReader y = new BufferedReader(text);
 
+
         String one;
         int num = 0;
+
 
         while ((one = y.readLine()) != null) {
             num++;
         }
-        y.close();
 
+
+        y.close();
         return num;
     }
+
 
 }

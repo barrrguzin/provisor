@@ -50,14 +50,13 @@ public class ProvisionController {
     }
 
 
-    @GetMapping("/spa-vp/{configName}")
+    @GetMapping("/snr-vp/{configName}")
     public String giveConfigToSNRVP5X(@PathVariable("configName") String configName, HttpServletRequest request){
         String ip = requestService.getClientIp(request);
         String mac = configName.replace(".cfg", "");
 
         log.info("Request configuration file for SNR VP-5X by: " + ip + "; " + mac + ";");
 
-        //String output = "Запрос на получение конфига от: IP: " + ip + ", MAC: " + mac;
         String configuration = configFileService.getConfigFileSNRVP5X(configName);
 
 
@@ -67,8 +66,6 @@ public class ProvisionController {
 
     @PatchMapping("/reload")
     public String requestReloadFromSPA9XX(@ModelAttribute("data") DataToReloadConfig data, Principal principal, HttpServletRequest request) {
-        log.info("User: " + principal.getName() + "; From: " + requestService.getClientIp(request) + "; Try to send PATCH request to page: " + request.getRequestURI());
-
 
         String phoneIp = data.getIp();
         String phoneMac = data.getMac();
@@ -86,8 +83,9 @@ public class ProvisionController {
         String finalUrl = "http://" + phoneIp + "/admin/resync?" + configUrl;
         ResponseEntity entity = digestRestTemplate.exchange(finalUrl, HttpMethod.GET, null, String.class);
 
+        log.info("User: " + principal.getName() + "; From: " + requestService.getClientIp(request) + "; Try to send PATCH request to page: " + request.getRequestURI() + "; Status code: " + entity.getStatusCode());
 
-        return finalUrl + "\n" + entity.getBody().toString();
+        return entity.getBody().toString();
     }
 
 

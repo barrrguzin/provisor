@@ -42,10 +42,11 @@ public class ConfigGeneratorForSNRVP5x {
 
 
 
-    public void generateConfigFile(String number, String mac_address){
+    public void generateConfigFile(String number, String macAddress){
 
 
         OutUsers.User aliasData = ecssUserDataDAO.allAliasData(number);
+
 
         String login = aliasData.getLogin();
         String password = aliasData.getPassword();
@@ -56,25 +57,17 @@ public class ConfigGeneratorForSNRVP5x {
         String config = configGenerator(login,password,username,display_name);
 
 
-        if (mac_address.contains(":")){
-            mac_address = mac_address.replace(":","");
-        }
-        if (mac_address.contains("-")){
-            mac_address = mac_address.replace("-","");
-        }
-        if (mac_address.contains(" ")){
-            mac_address = mac_address.replace(" ","");
-        }
-        mac_address = mac_address.toUpperCase();
+        macAddress = formatMacAddress(macAddress);
+
 
         try {
-            FileWriter configFile = new FileWriter(PATH_TO_READY_CONFIG_FILES + mac_address + ".cfg");
+            FileWriter configFile = new FileWriter(PATH_TO_READY_CONFIG_FILES + macAddress + ".cfg");
             configFile.write(config);
             configFile.flush();
             configFile.close();
-            log.info("Configuration file created for VP5X (" + PATH_TO_READY_CONFIG_FILES  + mac_address + ".cfg" + "), with number:" + number + ".");
+            log.info("Configuration file created for VP5X (" + PATH_TO_READY_CONFIG_FILES  + macAddress + ".cfg" + "), with number:" + number + ".");
         } catch (IOException e) {
-            log.error("Can't save configuration file for VP5X (" + PATH_TO_READY_CONFIG_FILES + mac_address + ".cfg" + "). Error: " + e);
+            log.error("Can't save configuration file for VP5X (" + PATH_TO_READY_CONFIG_FILES + macAddress + ".cfg" + "). Error: " + e);
             throw new RuntimeException(e);
         }
 
@@ -112,9 +105,23 @@ public class ConfigGeneratorForSNRVP5x {
         }
 
         return config;
-
-
-
-
     }
+
+
+    private String formatMacAddress(String macAddress) {
+
+        macAddress.toUpperCase();
+        if (macAddress.contains(":")){
+            macAddress.replace(":","");
+        }
+        if (macAddress.contains("-")){
+            macAddress.replace("-","");
+        }
+        if (macAddress.contains(" ")){
+            macAddress.replace(" ","");
+        }
+        return macAddress;
+    }
+
+
 }

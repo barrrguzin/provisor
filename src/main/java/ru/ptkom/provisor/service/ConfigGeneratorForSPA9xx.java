@@ -42,39 +42,30 @@ public class ConfigGeneratorForSPA9xx {
 
 
 
-    public void generateConfigFile(String number, String mac_address){
+    public void generateConfigFile(String number, String macAddress){
 
 
         OutUsers.User aliasData = ecssUserDataDAO.allAliasData(number);
+
 
         String login = aliasData.getLogin();
         String password = aliasData.getPassword();
         String username = aliasData.getAliases_list();
         String display_name = aliasData.getAliases_list();
+        macAddress = formatMacAddress(macAddress);
 
 
         String config = configGenerator(login,password,username,display_name);
 
 
-        if (mac_address.contains(":")){
-            mac_address = mac_address.replace(":","");
-        }
-        if (mac_address.contains("-")){
-            mac_address = mac_address.replace("-","");
-        }
-        if (mac_address.contains(" ")){
-            mac_address = mac_address.replace(" ","");
-        }
-        mac_address = mac_address.toLowerCase();
-
         try {
-            FileWriter configFile = new FileWriter(PATH_TO_READY_CONFIG_FILES + "spa" + mac_address + ".cfg");
+            FileWriter configFile = new FileWriter(PATH_TO_READY_CONFIG_FILES + "spa" + macAddress + ".cfg");
             configFile.write(config);
             configFile.flush();
             configFile.close();
-            log.info("Configuration file created for SPA9XX (" + PATH_TO_READY_CONFIG_FILES + "spa" + mac_address + ".cfg" + "), with number:" + number + ".");
+            log.info("Configuration file created for SPA9XX (" + PATH_TO_READY_CONFIG_FILES + "spa" + macAddress + ".cfg" + "), with number:" + number + ".");
         } catch (IOException e) {
-            log.error("Can't save configuration file for SPA9XX (" + PATH_TO_READY_CONFIG_FILES + "spa" + mac_address + ".cfg" + "). Error: " + e);
+            log.error("Can't save configuration file for SPA9XX (" + PATH_TO_READY_CONFIG_FILES + "spa" + macAddress + ".cfg" + "). Error: " + e);
             throw new RuntimeException(e);
         }
 
@@ -110,8 +101,23 @@ public class ConfigGeneratorForSPA9xx {
             config+= line + "\n";
 
         }
-
-
         return config;
+    }
+
+
+    private String formatMacAddress(String macAddress) {
+
+        macAddress.toLowerCase();
+        if (macAddress.contains(":")){
+            macAddress.replaceAll(":","");
+        }
+        if (macAddress.contains("-")){
+            macAddress.replaceAll("-","");
+        }
+        if (macAddress.contains(" ")){
+            macAddress.replaceAll(" ","");
+        }
+
+        return macAddress;
     }
 }

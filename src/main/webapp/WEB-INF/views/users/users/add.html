@@ -23,11 +23,18 @@
         <label class="form-check-label" for="role" th:text="${role}"/>
     </div>
 
-    <p><button type="submit" class="btn btn-outline-success">Добавить</button>
+    <div class="btn-group btn btn-outline-dark">
+
+    <button type="submit" class="btn btn-outline-success">Добавить</button>
+
+    <a href="/users" class="btn btn-outline-danger">
+        <button type="button" class="btn text-danger">Назад</button>
+    </a>
+
+    </div>
 </form>
-<p><a href="/users">
-    <button type="button" class="btn btn-outline-danger">Назад</button>
-</a></p>
+
+
 </body>
 </html>
 

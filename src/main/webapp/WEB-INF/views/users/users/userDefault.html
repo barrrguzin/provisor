@@ -7,6 +7,12 @@
 <body>
 <div th:insert="~{fragments/base :: body}"></div>
 
+<div class="btn-group btn btn-outline-dark">
+  <a href="/users">
+    <button type="button" class="btn btn-outline-warning">Назад</button>
+  </a>
+</div>
+
 <table class="table table-hover">
 
   <tr>
@@ -70,10 +76,6 @@
     </td>
   </tr>
 </table>
-
-<p><a href="/users">
-  <button type="button" class="btn btn-outline-dark">Назад</button>
-</a></p>
 
 </body>
 </html>

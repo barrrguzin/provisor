@@ -7,6 +7,22 @@
 <body>
 <div th:insert="~{fragments/base :: body}"></div>
 
+<style>
+  .btn-left {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .btn-middle {
+    border-radius: 0;
+  }
+
+  .btn-right {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+</style>
+
 <form th:method="patch" th:action="@{/users/edit}" th:object="${user}">
 
 <table class="table table-hover">
@@ -57,20 +73,25 @@
   </div>
 
 
-  <p><button type="submit" class="btn btn-outline-warning" id="edit">Изменить</button>
-<!--  <p><button type="submit" id="delete" th:method="delete" th:formaction="@{/users/delete}">Удалить?</button>-->
+  <div class="btn-group" role="group">
+    <button type="submit" class="btn btn-outline-warning btn-left" id="edit">Изменить</button>
+  </div>
 
 </form>
 
 <form th:method="delete" th:action="@{/users/delete}" th:object="${user}">
   <input type="hidden" id="username" th:field="*{username}">
   <input type="hidden" id="id" th:field="*{id}">
-  <p><button type="submit" class="btn btn-outline-danger" id="delete">Удалить</button>
+
+  <div class="btn-group" role="group">
+    <button type="submit" class="btn btn-outline-danger btn-middle" id="delete">Удалить</button>
+  </div>
+
 </form>
 
-<p><a href="/users">
+<a href="/users" class="btn-group" role="group">
   <button type="button" class="btn btn-outline-dark">Назад</button>
-</a></p>
+</a>
 
 </body>
 </html>

@@ -28,7 +28,7 @@ public class NetworkToolsController {
     private RequestService requestService;
 
 
-    private static final String SERVER_ADDRESS = "192.168.68.2";
+    private static final String SERVER_ADDRESS = "192.168.68.1";
 
 
     @GetMapping("/monitor")

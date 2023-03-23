@@ -13,6 +13,10 @@ public class ConfigFileService {
 
     @Autowired
     private FileService fileService;
+    @Autowired
+    private ConfigGeneratorForSNRVP5x configGeneratorForSNRVP5x;
+    @Autowired
+    private ConfigGeneratorForSPA9xx configGeneratorForSPA9xx;
 
 
     private static final String PATH_TO_INIT_CONFIG;
@@ -66,4 +70,25 @@ public class ConfigFileService {
 
         return config.toString();
     }
+
+
+    public String defineAndGenerateConfigFile(String number, String mac, String model) {
+
+
+        if (model.equals("spa9XX")){
+            configGeneratorForSPA9xx.generateConfigFile(number, mac);
+            return "phone/make";
+
+
+        } else if (model.equals("vp5X")) {
+            configGeneratorForSNRVP5x.generateConfigFile(number,mac);
+            return "phone/make";
+
+
+        } else {
+            return "phone/make";
+        }
+    }
+
+
 }
