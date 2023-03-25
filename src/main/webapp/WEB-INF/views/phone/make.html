@@ -6,22 +6,11 @@
 </head>
 <body>
 <div th:insert="~{fragments/base :: body}"></div>
+<script type="text/javascript" src="/static/src/scripts.js"></script>
 <h1>Введите данные для генерации конфиг файлы:</h1>
 
 
-<iframe id="update" name="update" style="display: none"></iframe>
-    <script>
-        const iframe = document.getElementById('update');
-        iframe.addEventListener('load', function () {
-            let responseText = iframe.contentDocument.body.textContent;
-            if (responseText != null && responseText != '') {
-                alert(responseText);
-            }
-        });
-    </script>
-
-
-<form acttion="/config/make" target="update" th:method="post">
+<form acttion="/config/make" id='generate' target="update" th:method="post" enctype="application/x-www-form-urlencoded">
     <table>
         <tr>
             <th>
@@ -33,7 +22,12 @@
         </tr>
     </table>
     <p><button type="submit" class="btn btn-outline-success">Добавить</button>
+
 </form>
+
+<script>
+    responseHandler('generate','/config/make', 'POST');
+</script>
 
 <p><a href="/">
     <button type="button" class="btn btn-outline-dark">Назаад</button>

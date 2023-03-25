@@ -17,21 +17,6 @@
 </a>
 </div>
 
-
-
-<iframe id="update" name="update" style="display: none"></iframe>
-    <script>
-        const iframe = document.getElementById('update');
-        iframe.addEventListener('load', function () {
-            let responseText = iframe.contentDocument.body.textContent;
-            if (responseText != null && responseText != '') {
-                alert(responseText);
-            }
-        });
-    </script>
-
-
-
 <div th:switch="${hosts[0][0]}">
     <span th:case="${'IP адресов в сети не обнаружено'}" th:utext= "${'IP адресов в сети не обнаружено'}"></span>
     <span th:case="*">

@@ -77,16 +77,16 @@ public class ConfigFileService {
 
         if (model.equals("spa9XX")){
             configGeneratorForSPA9xx.generateConfigFile(number, mac);
-            return "phone/make";
+            return "Configuration file to Linksys SPA9XX with number " + number + " and MAC " + mac + " generated!";
 
 
         } else if (model.equals("vp5X")) {
             configGeneratorForSNRVP5x.generateConfigFile(number,mac);
-            return "phone/make";
+            return "Configuration file to SNR VP-5X with number " + number + " and MAC " + mac + " generated!";
 
 
         } else {
-            return "phone/make";
+            return "Phone model is not define!";
         }
     }
 
