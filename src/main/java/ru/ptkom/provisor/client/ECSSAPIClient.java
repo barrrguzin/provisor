@@ -169,38 +169,25 @@ public class ECSSAPIClient {
     private ResponseEntity sendRequest(In request){
 
 
-        JAXBContext jaxbContext = null;
         try {
-            jaxbContext = JAXBContext.newInstance(In.class);
-        } catch (JAXBException e) {
-            throw new RuntimeException(e);
-        }
-        Marshaller jaxbMarshaller = null;
-        try {
-            jaxbMarshaller = jaxbContext.createMarshaller();
-        } catch (JAXBException e) {
-            throw new RuntimeException(e);
-        }
-        StringWriter sw = new StringWriter();
-        try {
+            JAXBContext jaxbContext = JAXBContext.newInstance(In.class);
+            Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+            StringWriter sw = new StringWriter();
             jaxbMarshaller.marshal(request, sw);
+            String xmlContent = sw.toString();
+            HttpHeaders requestHeaders = new HttpHeaders();
+            requestHeaders.add("Cookie", TOKEN);
+            HttpEntity requestEntity = new HttpEntity(xmlContent, requestHeaders);
+            ResponseEntity response = restTemplate.exchange(GET_USERS_URL, HttpMethod.POST, requestEntity, String.class);
+            return response;
         } catch (JAXBException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException();
         }
-        String xmlContent = sw.toString();
-
-
-        HttpHeaders requestHeaders = new HttpHeaders();
-        requestHeaders.add("Cookie", TOKEN);
-        HttpEntity requestEntity = new HttpEntity(xmlContent, requestHeaders);
-        ResponseEntity response = restTemplate.exchange(GET_USERS_URL, HttpMethod.POST, requestEntity, String.class);
-        return response;
     }
 
 
     private static void disableSslVerification() {
-        try
-        {
+        try {
             // Create a trust manager that does not validate certificate chains
             TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
                 public java.security.cert.X509Certificate[] getAcceptedIssuers() {

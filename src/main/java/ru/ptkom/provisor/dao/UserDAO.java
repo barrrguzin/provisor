@@ -3,10 +3,13 @@ package ru.ptkom.provisor.dao;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.ptkom.provisor.exception.PBXUserNotFoundException;
+import ru.ptkom.provisor.exception.UserNotFoundException;
 import ru.ptkom.provisor.models.PBXUser;
 import ru.ptkom.provisor.models.User;
 import ru.ptkom.provisor.repository.UserRepository;
 
+import java.util.Optional;
 import java.util.stream.StreamSupport;
 
 
@@ -21,25 +24,30 @@ public class UserDAO {
     private PBXUserDAO pbxUserDAO;
 
 
-    public User getUserById(Long id) {
-        User user = userRepository.findById(id).get();
-        if (user == null) {
-            log.info("User with ID: " + id + " in not exist (null).");
+    public User getUserById(Long id) throws UserNotFoundException {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
+            User existedUser = user.get();
+            log.info("User with ID: " + id + "; and username: " + existedUser.getUsername() + "; got from data base.");
+            return existedUser;
+
         } else {
-            log.info("User with ID: " + id + "; and username: " + user.getUsername() + "; got from data base.");
+            log.warn("User with ID: " + id + " in not exist (null).");
+            throw new UserNotFoundException("Phone user with ID " + id + " not found.");
         }
-        return user;
     }
 
 
-    public User getUserByUsername(String username) {
+
+    public User getUserByUsername(String username) throws UserNotFoundException {
         User user = userRepository.findByUsername(username);
         if (user == null) {
-            log.info("User with username: " + username + " in not exist (null).");
+            log.warn("User with username: " + username + " in not exist.");
+            throw new UserNotFoundException("User with username: " + username + " in not exist.");
         } else {
             log.info("User with username: " + username + " got from data base.");
+            return user;
         }
-        return user;
     }
 
 
@@ -74,13 +82,18 @@ public class UserDAO {
                 log.info("Data of user " + user.getUsername() + " updated.");
             }
         } else {
-            Long oldId = pbxUserDAO.getUserByNumber(newNumber.getNumber()).getId();
-            if ((userRepository.findByUsername(newUsername) == null || userRepository.findByUsername(newUsername).getId() == id) && (userRepository.findByPbxUserId(oldId) == null || userRepository.findByPbxUserId(oldId).getId() == id)) {
-                userRepository.save(user);
-                log.info("Data of user " + user.getUsername() + " updated.");
-            } else {
-                log.info("Can't update data of user " + newUsername + " because new username or phone number belongs to another user.");
+            try {
+                Long oldId = pbxUserDAO.getUserByNumber(newNumber.getNumber()).getId();
+                if ((userRepository.findByUsername(newUsername) == null || userRepository.findByUsername(newUsername).getId() == id) && (userRepository.findByPbxUserId(oldId) == null || userRepository.findByPbxUserId(oldId).getId() == id)) {
+                    userRepository.save(user);
+                    log.info("Data of user " + user.getUsername() + " updated.");
+                } else {
+                    log.info("Can't update data of user " + newUsername + " because new username or phone number belongs to another user.");
+                }
+            } catch (PBXUserNotFoundException e) {
+                log.error("Cant get ID of user who should to be updated: " + e.getMessage());
             }
+
         }
     }
 

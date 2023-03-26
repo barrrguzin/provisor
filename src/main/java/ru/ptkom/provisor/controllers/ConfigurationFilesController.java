@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.ptkom.provisor.dao.PBXUserDAO;
+import ru.ptkom.provisor.exception.PBXUserNotFoundException;
 import ru.ptkom.provisor.service.ConfigFileService;
 import ru.ptkom.provisor.service.RequestService;
 
@@ -57,19 +58,19 @@ public class ConfigurationFilesController {
         }
 
 
-        String mac = pbxUserDAO.getMacByNumber(number);
-        String phoneModel = pbxUserDAO.getPhoneModelByNumber(number);
+        try {
+            String mac = pbxUserDAO.getMacByNumber(number);
+            String phoneModel = pbxUserDAO.getPhoneModelByNumber(number);
 
 
-        if(mac == null || phoneModel == null){
-            return RESPONSE_LIST[1];
+            if(mac == null || phoneModel == null){
+                return RESPONSE_LIST[1];
+            }
+
+
+            return configFileService.defineAndGenerateConfigFile(number, mac, phoneModel);
+        } catch (PBXUserNotFoundException e) {
+            return e.getMessage();
         }
-
-
-        return configFileService.defineAndGenerateConfigFile(number, mac, phoneModel);
-
-
     }
-
-
 }

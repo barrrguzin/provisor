@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.ptkom.provisor.dao.UserDAO;
+import ru.ptkom.provisor.exception.PBXUserNotFoundException;
+import ru.ptkom.provisor.exception.UserNotFoundException;
 import ru.ptkom.provisor.models.User;
 import ru.ptkom.provisor.service.RequestService;
 import ru.ptkom.provisor.service.UserService;
@@ -43,23 +45,33 @@ public class UsersController {
     @GetMapping("/users/{id}")
     public String showUserParameters(@PathVariable("id") Long id, Model model, Principal principal, HttpServletRequest request) {
         log.info("User: " + principal.getName() + "; From: " + requestService.getClientIp(request) + "; Try to get page: " + request.getRequestURI());
-        User user = userDAO.getUserById(id);
-        model.addAttribute("user", user);
-        return "users/users/user";
+
+        try {
+            User user = userDAO.getUserById(id);
+            model.addAttribute("user", user);
+            return "users/users/user";
+        } catch (UserNotFoundException e) {
+            String[] errorData = {"404", "User with ID " + id + " not found."};
+            model.addAttribute("error", errorData);
+            return "/error";
+        }
     }
 
 
     @GetMapping("/users/{id}/edit")
     public String editUserParameters(@PathVariable("id") Long id, Model model, Principal principal, HttpServletRequest request) {
         log.info("User: " + principal.getName() + "; From: " + requestService.getClientIp(request) + "; Try to get page: " + request.getRequestURI());
-        User user = userDAO.getUserById(id);
-        user.setPassword("");
-        model.addAttribute("user", user);
-        model.addAttribute("list", LIST_OF_SUPPORTED_ROLES);
-        if (user.getUsername().equals("barguzin")){
-            return "users/users/userDefault";
-        } else {
+
+        try {
+            User user = userDAO.getUserById(id);
+            user.setPassword("");
+            model.addAttribute("user", user);
+            model.addAttribute("list", LIST_OF_SUPPORTED_ROLES);
             return "users/users/edit";
+        } catch (UserNotFoundException e) {
+            String[] errorData = {"404", "User with ID " + id + " not found."};
+            model.addAttribute("error", errorData);
+            return "/error";
         }
     }
 
@@ -74,13 +86,19 @@ public class UsersController {
             return "users/users/edit";
         }
         String number = user.getPbxUser().getNumber();
-        if (number.equals("")){
-            userService.updateUser(user, roles);
 
-        } else {
-            userService.updateUser(user,number, roles);
-
+        try {
+            if (number.equals("")){
+                userService.updateUser(user, roles);
+            } else {
+                userService.updateUser(user,number, roles);
+            }
+        } catch (PBXUserNotFoundException e) {
+            log.warn("User data not updated: " + e.getMessage());
+        } catch (UserNotFoundException e) {
+            log.warn("User data not updated: " + e.getMessage());
         }
+
         return "redirect:/users";
     }
 
@@ -89,12 +107,8 @@ public class UsersController {
     public String deleteUsersData(@ModelAttribute("user") User user, Principal principal, HttpServletRequest request){
         log.info("User: " + principal.getName() + "; From: " + requestService.getClientIp(request) + "; Try to send DELETE request to page: " + request.getRequestURI());
         if (user.getUsername() != null) {
-            if (user.getUsername().equals("barguzin")) {
-                return "redirect:/users";
-            } else {
-                userDAO.deleteUser(user);
-                return "redirect:/users";
-            }
+            userDAO.deleteUser(user);
+            return "redirect:/users";
         }
         return "redirect:/users";
     }

@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.ptkom.provisor.dao.PBXUserDAO;
 import ru.ptkom.provisor.dao.UserDAO;
+import ru.ptkom.provisor.exception.PBXUserNotFoundException;
+import ru.ptkom.provisor.exception.UserNotFoundException;
 import ru.ptkom.provisor.models.PBXUser;
 import ru.ptkom.provisor.models.Role;
 import ru.ptkom.provisor.repository.RoleRepository;
@@ -47,7 +49,7 @@ public class UserService implements UserDetailsService {
     }
 
 
-    public void updateUser(User user, String number, String[] roles){
+    public void updateUser(User user, String number, String[] roles) throws PBXUserNotFoundException, UserNotFoundException {
         if (roles != null) {
             List<Role> list = new ArrayList<Role>(roles.length);
             for (int i = 0; i < roles.length; i++) {
@@ -76,7 +78,7 @@ public class UserService implements UserDetailsService {
         log.debug("User " + user.getUsername() + " send to update method.");
         userDAO.updateUser(user);
     }
-    public void updateUser(User user, String[] roles){
+    public void updateUser(User user, String[] roles) throws UserNotFoundException {
         if (roles != null) {
             List<Role> list = new ArrayList<Role>(roles.length);
             for (int i = 0; i < roles.length; i++) {
@@ -119,7 +121,12 @@ public class UserService implements UserDetailsService {
         String number = user.getPbxUser().getNumber();
         String password = user.getPassword();
 
-        user.setPbxUser(pbxUserDAO.getUserByNumber(number));
+        try {
+            user.setPbxUser(pbxUserDAO.getUserByNumber(number));
+        } catch (PBXUserNotFoundException e) {
+            user.setPbxUser(null);
+            log.info("There is no phone number to new user " + user.getUsername());
+        }
         user.setPassword(passwordEncoder.encode(password));
         log.debug("Password to " + user.getUsername() + " encoded.");
         log.debug("User " + user.getUsername() + " send to add method.");

@@ -18,9 +18,10 @@ public class ErrorsController implements ErrorController {
     @Autowired
     private TemplateEngine templateEngine;
 
-    private static final String[] ERRORS_DESCRIPTIONS_LIST = {"Стнаница не найдена, поищите получше...",
-    "Ошибка сервера, что-то явно пошло не так...",
-    "Что-то не так..."};
+    private static final String[] ERRORS_DESCRIPTIONS_LIST = {"Что-то не так...",
+            "Стнаница не найдена, поищите получше...",
+            "Ошибка сервера, что-то явно пошло не так...",
+            "Так делать нельзя..."};
 
     @GetMapping("/error")
     public String httpErrorHandler(HttpServletRequest request, HttpServletResponse response){
@@ -29,15 +30,19 @@ public class ErrorsController implements ErrorController {
         String[] errorData= new String[2];
         if (code == 404) {
             errorData[0] = String.valueOf(code);
-            errorData[1] = ERRORS_DESCRIPTIONS_LIST[0];
+            errorData[1] = ERRORS_DESCRIPTIONS_LIST[1];
             context.setVariable("error", errorData);
         } else if (code == 500) {
             errorData[0] = String.valueOf(code);
-            errorData[1] = ERRORS_DESCRIPTIONS_LIST[1];
+            errorData[1] = ERRORS_DESCRIPTIONS_LIST[2];
+            context.setVariable("error", errorData);
+        } else if (code == 405) {
+            errorData[0] = String.valueOf(code);
+            errorData[1] = ERRORS_DESCRIPTIONS_LIST[3];
             context.setVariable("error", errorData);
         } else {
             errorData[0] = String.valueOf(code);
-            errorData[1] = ERRORS_DESCRIPTIONS_LIST[2];
+            errorData[1] = ERRORS_DESCRIPTIONS_LIST[0];
             context.setVariable("error", errorData);
         }
 

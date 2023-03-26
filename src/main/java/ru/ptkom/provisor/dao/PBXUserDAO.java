@@ -3,12 +3,13 @@ package ru.ptkom.provisor.dao;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.ptkom.provisor.exception.PBXUserNotFoundException;
 import ru.ptkom.provisor.models.PBXUser;
 import ru.ptkom.provisor.models.User;
 import ru.ptkom.provisor.repository.PBXUsersRepository;
 import ru.ptkom.provisor.repository.UserRepository;
 
-import java.io.IOException;
+import java.util.Optional;
 import java.util.stream.StreamSupport;
 
 
@@ -66,11 +67,11 @@ public class PBXUserDAO {
     }
 
 
-    public String getMacByNumber(String number){
+    public String getMacByNumber(String number) throws PBXUserNotFoundException {
         PBXUser user = pbxUsersRepository.findByNumber(number);
         if(user == null){
-            log.info("Phone user with phone number " + number + " not found.");
-            return null;
+            log.warn("Phone user with phone number " + number + " not found.");
+            throw new PBXUserNotFoundException("Phone user with phone number " + number + " not found.");
         } else {
             String mac = user.getMac();
             log.info("Phone user with phone number " + number + " found and has MAC: " + mac);
@@ -79,10 +80,11 @@ public class PBXUserDAO {
     }
 
 
-    public PBXUser getUserByNumber(String number){
+    public PBXUser getUserByNumber(String number) throws PBXUserNotFoundException {
         PBXUser user = pbxUsersRepository.findByNumber(number);
         if (user == null) {
-            log.info("Phone user with number " + number + " not exists, return null.");
+            log.warn("Phone user with number " + number + " not exists.");
+            throw new PBXUserNotFoundException("Phone user with number " + number + " not exists.");
         } else {
             log.info("Phone user with number " + number + " got from data base.");
         }
@@ -90,11 +92,11 @@ public class PBXUserDAO {
     }
 
 
-    public String getPhoneModelByNumber(String number){
+    public String getPhoneModelByNumber(String number) throws PBXUserNotFoundException {
         PBXUser user = pbxUsersRepository.findByNumber(number);
         if(user == null){
-            log.info("Phone user with number " + number + " not found.");
-            return null;
+            log.warn("Phone user with number " + number + " not found.");
+            throw new PBXUserNotFoundException("Phone user with number " + number + " not found.");
         } else {
             String model = user.getPhoneModel();
             log.info("Phone user with number " + number + " has phone " + model + " .");
@@ -103,18 +105,19 @@ public class PBXUserDAO {
     }
 
 
-    public PBXUser getUserById(Long id) {
-        PBXUser user = null;
-        try {
-            user = pbxUsersRepository.findById(id).get();
-            log.info("Got phone user by ID: " + id + ".");
-        } finally {
-            return user;
+    public PBXUser getUserById(Long id) throws PBXUserNotFoundException {
+        Optional<PBXUser> user = pbxUsersRepository.findById(id);
+        if (user.isPresent()) {
+            log.info("Got phone user by ID: " + id);
+            return user.get();
+        } else {
+            log.warn("Phone user with ID " + id + " not found.");
+            throw new PBXUserNotFoundException("Phone user with ID " + id + " not found.");
         }
     }
 
 
-    public void update(PBXUser updatedUser){
+    public void update(PBXUser updatedUser) throws PBXUserNotFoundException {
 
 
         Long id = updatedUser.getId();
