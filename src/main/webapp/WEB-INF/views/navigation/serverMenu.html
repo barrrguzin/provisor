@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:insert="~{fragments/base :: head}"></div>
+    <title>Главное меню</title>
+</head>
+<body>
+
+<div th:insert="~{fragments/base :: body}"></div>
+<div th:insert="~{fragments/base :: menu}"></div>
+
+<div>
+    <ul class="mx-auto">
+        <p/>
+
+        <a href="/server/services"><button type="button" class="btn btn-light">Управление службами</button></a><p/>
+        <a href="/server/configurations"><button type="button" class="btn btn-light">Управление файлами конфигурации служб</button></a><p/>
+        <a href="/manager/html"><button type="button" class="btn btn-light">Tomcat</button></a><p/>
+        <a href="/"><button type="button" class="btn btn-light">Назад</button></a>
+    </ul>
+</div>
+
+</body>
+</html>

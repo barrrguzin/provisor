@@ -6,11 +6,10 @@
 </head>
 <body>
 <div th:insert="~{fragments/base :: body}"></div>
-<script type="text/javascript" src="/static/src/scripts.js"></script>
 <h1>Введите данные для генерации конфиг файлы:</h1>
 
 
-<form acttion="/config/make" id='generate' target="update" th:method="post" enctype="application/x-www-form-urlencoded">
+<form action="/config/make" id='generate' target="update" th:method="post" enctype="application/x-www-form-urlencoded">
     <table>
         <tr>
             <th>

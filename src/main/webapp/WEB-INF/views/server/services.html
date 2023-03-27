@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:insert="~{fragments/base :: head}"></div>
+    <title>Главное меню</title>
+<!--    <style>-->
+<!--        .pre-half-width {-->
+<!--            max-width: 95%;-->
+<!--        }-->
+<!--    </style>-->
+</head>
+<body>
+<div th:insert="~{fragments/base :: body}"></div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-6">
+            <div>
+                <form action="/server/services/restart" id='tftpRestart' target="update" th:method="post" enctype="application/x-www-form-urlencoded">
+                    <input type="hidden" name="service" value="tftp">
+                    <button type="submit" class="btn btn-outline-warning">Перезагрузить TFTP</button>
+                </form>
+                <script>
+                    responseHandler('tftpRestart','/server/services/restart', 'POST');
+                </script>
+            </div>
+            <p/>
+            <div>
+                <form action="/server/services/start" id='tftpStart' target="update" th:method="post" enctype="application/x-www-form-urlencoded">
+                    <input type="hidden" name="service" value="tftp">
+                    <button type="submit" class="btn btn-outline-success">Запустить TFTP</button>
+                </form>
+                <script>
+                    responseHandler('tftpStart','/server/services/start', 'POST');
+                </script>
+            </div>
+            <p/>
+            <div>
+                <form action="/server/services/stop" id='tftpStop' target="update" th:method="post" enctype="application/x-www-form-urlencoded">
+                    <input type="hidden" name="service" value="tftp">
+                    <button type="submit" class="btn btn-outline-danger">Остановить TFTP</button>
+                </form>
+                <script>
+                    responseHandler('tftpStop','/server/services/stop', 'POST');
+                </script>
+            </div>
+
+            <pre class="text-black pre-half-width text-break">
+                <p th:text="${tftpStatus}"></p>
+            </pre>
+        </div>
+
+
+         <div class="col-sm-6">
+             <div>
+                 <form action="/server/services/restart" id='dhcpRestart' target="update" th:method="post" enctype="application/x-www-form-urlencoded">
+                     <input type="hidden" name="service" value="dhcp">
+                     <button type="submit" class="btn btn-outline-warning">Перезагрузить DHCP</button>
+                 </form>
+                 <script>
+                     responseHandler('dhcpRestart','/server/services/restart', 'POST');
+                 </script>
+             </div>
+             <p/>
+             <div>
+                 <form action="/server/services/start" id='dhcpStart' target="update" th:method="post" enctype="application/x-www-form-urlencoded">
+                     <input type="hidden" name="service" value="dhcp">
+                     <button type="submit" class="btn btn-outline-success">Запустить DHCP</button>
+                 </form>
+                 <script>
+                     responseHandler('dhcpStart','/server/services/start', 'POST');
+                 </script>
+             </div>
+             <p/>
+             <div>
+                 <form action="/server/services/stop" id='dhcpStop' target="update" th:method="post" enctype="application/x-www-form-urlencoded">
+                     <input type="hidden" name="service" value="dhcp">
+                     <button type="submit" class="btn btn-outline-danger">Остановить DHCP</button>
+                 </form>
+                 <script>
+                     responseHandler('dhcpStop','/server/services/stop', 'POST');
+                 </script>
+             </div>
+
+            <pre class="text-black pre-half-width text-break">
+                <p th:text="${dhcpStatus}"></p>
+            </pre>
+         </div>
+    </div>
+</div>
+
+<a href="/server">
+    <button type="button" class="btn btn-outline-dark">Назад</button>
+</a>
+
+</body>
+</html>

@@ -38,4 +38,9 @@ public class IndexController {
     }
 
 
+    @GetMapping("/about")
+    public String getInformation(Principal principal, HttpServletRequest request){
+        log.info("User: " + principal.getName() + "; From: " + requestService.getClientIp(request) + "; Try to get page: " + request.getRequestURI());
+        return "about";
+    }
 }
