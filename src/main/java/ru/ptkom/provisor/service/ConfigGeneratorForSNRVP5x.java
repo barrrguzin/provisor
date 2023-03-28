@@ -11,7 +11,6 @@ import ru.ptkom.provisor.dao.ECSSUserDataDAO;
 import ru.ptkom.provisor.models.sipUsers.OutUsers;
 
 
-import java.io.FileWriter;
 import java.io.IOException;
 
 @Slf4j
@@ -25,7 +24,6 @@ public class ConfigGeneratorForSNRVP5x {
     private FileService fileService;
 
 
-    private static final String PATH_TO_INIT_CONFIG;
     private static final String PATH_TO_TEMPLATE;
     private static final String PATH_TO_READY_CONFIG_FILES;
 
@@ -37,7 +35,6 @@ public class ConfigGeneratorForSNRVP5x {
 
         PATH_TO_TEMPLATE = config.getProperty("path.snrvp.templ");
         PATH_TO_READY_CONFIG_FILES = config.getProperty("path.snrvp.confs");
-        PATH_TO_INIT_CONFIG = config.getProperty("path.snrvp.init");
     }
 
 
@@ -61,10 +58,11 @@ public class ConfigGeneratorForSNRVP5x {
 
 
         try {
-            FileWriter configFile = new FileWriter(PATH_TO_READY_CONFIG_FILES + macAddress + ".cfg");
-            configFile.write(config);
-            configFile.flush();
-            configFile.close();
+            fileService.writeFile(PATH_TO_READY_CONFIG_FILES + macAddress + ".cfg", config);
+//            FileWriter configFile = new FileWriter(PATH_TO_READY_CONFIG_FILES + macAddress + ".cfg");
+//            configFile.write(config);
+//            configFile.flush();
+//            configFile.close();
             log.info("Configuration file created for VP5X (" + PATH_TO_READY_CONFIG_FILES  + macAddress + ".cfg" + "), with number:" + number + ".");
         } catch (IOException e) {
             log.error("Can't save configuration file for VP5X (" + PATH_TO_READY_CONFIG_FILES + macAddress + ".cfg" + "). Error: " + e);
@@ -110,15 +108,15 @@ public class ConfigGeneratorForSNRVP5x {
 
     private String formatMacAddress(String macAddress) {
 
-        macAddress.toUpperCase();
+        macAddress = macAddress.toUpperCase();
         if (macAddress.contains(":")){
-            macAddress.replace(":","");
+            macAddress = macAddress.replace(":","");
         }
         if (macAddress.contains("-")){
-            macAddress.replace("-","");
+            macAddress = macAddress.replace("-","");
         }
         if (macAddress.contains(" ")){
-            macAddress.replace(" ","");
+            macAddress = macAddress.replace(" ","");
         }
         return macAddress;
     }

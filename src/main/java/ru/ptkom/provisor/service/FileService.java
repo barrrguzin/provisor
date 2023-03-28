@@ -3,10 +3,7 @@ package ru.ptkom.provisor.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 @Slf4j
 @Service
@@ -30,11 +27,20 @@ public class FileService {
 
 
             varRead.close();
+            file.close();
         } catch (IOException e) {
             log.error("Can't read file: (" + pathToFile + "). Error: " + e);
             throw new RuntimeException(e);
         }
         return lines;
+    }
+
+
+    public void writeFile(String path, String data) throws IOException {
+        FileWriter configFile = new FileWriter(path);
+        configFile.write(data);
+        configFile.flush();
+        configFile.close();
     }
 
 
@@ -54,6 +60,7 @@ public class FileService {
 
 
         y.close();
+        text.close();
         return num;
     }
 

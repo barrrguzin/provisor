@@ -4,10 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import ru.ptkom.provisor.service.ConfigFileService;
 import ru.ptkom.provisor.service.RequestService;
 import ru.ptkom.provisor.service.ServerServicesManagerService;
 
@@ -22,6 +20,8 @@ public class ServerController {
     private RequestService requestService;
     @Autowired
     private ServerServicesManagerService serverServicesManagerService;
+    @Autowired
+    private ConfigFileService configFileService;
 
     @GetMapping("/server")
     public String serverMenu(Model model, Principal principal, HttpServletRequest request) {
@@ -41,6 +41,64 @@ public class ServerController {
         model.addAttribute("dhcpStatus", dhcpStatus);
 
         return "server/services";
+    }
+
+
+    @GetMapping("/server/services/dhcp")
+    public String getDHCPServiceConfigurationFile(Model model, Principal principal, HttpServletRequest request) {
+        log.info("User: " + principal.getName() + "; From: " + requestService.getClientIp(request) + "; Try to get page: " + request.getRequestURI());
+        String dhcpConfiguration = configFileService.getDHCPConfigFile();
+        model.addAttribute("dhcpConfiguration", dhcpConfiguration);
+        return "server/dhcp";
+    }
+
+
+    @GetMapping("/server/services/dhcp/edit")
+    public String getFormWithDHCPServiceConfigurationFile(Model model, Principal principal, HttpServletRequest request) {
+        log.info("User: " + principal.getName() + "; From: " + requestService.getClientIp(request) + "; Try to get page: " + request.getRequestURI());
+        String dhcpConfiguration = configFileService.getDHCPConfigFile();
+        model.addAttribute("dhcpConfiguration", dhcpConfiguration);
+        return "server/dhcpEditConfig";
+    }
+
+
+    @PatchMapping("/server/services/dhcp/edit")
+    public String updateDHCPConfigFile(@RequestParam String dhcpConfiguration, Model model, Principal principal, HttpServletRequest request) {
+        log.info("User: " + principal.getName()
+                + "; From: " + requestService.getClientIp(request)
+                + "; Try to send PATCH request: " + request.getRequestURI());
+        configFileService.saveDHCPConfigFile(dhcpConfiguration);
+        return "redirect:/server/services/dhcp";
+    }
+
+
+    @GetMapping("/server/services/tftp")
+    public String getTFTPServiceConfigurationFile(Model model, Principal principal, HttpServletRequest request) {
+        log.info("User: " + principal.getName() + "; From: " + requestService.getClientIp(request) + "; Try to get page: " + request.getRequestURI());
+        String tftpConfiguration = configFileService.getTFTPConfigFile();
+        model.addAttribute("tftpConfiguration", tftpConfiguration);
+        return "server/tftp";
+    }
+
+
+    @GetMapping("/server/services/tftp/edit")
+    public String getFormWithTFTPServiceConfigurationFile(Model model, Principal principal, HttpServletRequest request) {
+        log.info("User: " + principal.getName() + "; From: " + requestService.getClientIp(request) + "; Try to get page: " + request.getRequestURI());
+        String tftpConfiguration = configFileService.getTFTPConfigFile();
+        model.addAttribute("tftpConfiguration", tftpConfiguration);
+        return "server/tftpEditConfig";
+    }
+
+
+    @PatchMapping("/server/services/tftp/edit")
+    public String updateTFTPConfigFile(@RequestParam String tftpConfiguration, Model model, Principal principal, HttpServletRequest request) {
+        log.info("User: " + principal.getName()
+                + "; From: " + requestService.getClientIp(request)
+                + "; Try to send PATCH request: " + request.getRequestURI());
+        //serverServicesManagerService.stopTFTPService();
+        configFileService.saveTFTPConfigFile(tftpConfiguration);
+        //serverServicesManagerService.startTFTPService();
+        return "redirect:/server/services/tftp";
     }
 
 
@@ -96,6 +154,4 @@ public class ServerController {
             return service;
         }
     }
-
-
-    }
+}

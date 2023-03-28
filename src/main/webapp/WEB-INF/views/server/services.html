@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <div th:insert="~{fragments/base :: head}"></div>
-    <title>Главное меню</title>
+    <title>Управление сервером</title>
 <!--    <style>-->
 <!--        .pre-half-width {-->
 <!--            max-width: 95%;-->
@@ -47,6 +47,12 @@
             <pre class="text-black pre-half-width text-break">
                 <p th:text="${tftpStatus}"></p>
             </pre>
+
+            <div>
+                <a href="/server/services/tftp">
+                    <button type="button" class="btn btn-outline-dark">Посмотреть конфигурационный файл службы TFTP</button>
+                </a>
+            </div>
         </div>
 
 
@@ -84,6 +90,12 @@
             <pre class="text-black pre-half-width text-break">
                 <p th:text="${dhcpStatus}"></p>
             </pre>
+
+             <div>
+                 <a href="/server/services/dhcp">
+                     <button type="button" class="btn btn-outline-dark">Посмотреть конфигурационный файл службы DHCP</button>
+                 </a>
+             </div>
          </div>
     </div>
 </div>
