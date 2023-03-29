@@ -154,4 +154,65 @@ public class ServerController {
             return service;
         }
     }
+
+
+    @GetMapping("/server/configurations")
+    public String initAndTemplateConfigurationsMenu(Model model, Principal principal, HttpServletRequest request) {
+        log.info("User: " + principal.getName() + "; From: " + requestService.getClientIp(request) + "; Try to get page: " + request.getRequestURI());
+        return "server/configurations";
+    }
+
+
+    @GetMapping("/server/configurations/spa921/init")
+    public String getInitialConfigFileForSPA921(Model model, Principal principal, HttpServletRequest request) {
+        log.info("User: " + principal.getName() + "; From: " + requestService.getClientIp(request) + "; Try to get page: " + request.getRequestURI());
+        String initSPA = configFileService.getInitialConfigFileForSPA921();
+        model.addAttribute("initSPA", initSPA);
+        return "phone/spa9xx/init";
+    }
+
+
+    @GetMapping("/server/configurations/spa941/init")
+    public String getInitialConfigFileForSPA941(Model model, Principal principal, HttpServletRequest request) {
+        log.info("User: " + principal.getName() + "; From: " + requestService.getClientIp(request) + "; Try to get page: " + request.getRequestURI());
+        String initSPA = configFileService.getInitialConfigFileForSPA941();
+        model.addAttribute("initSPA", initSPA);
+        return "phone/spa9xx/init";
+    }
+
+
+    @GetMapping("/server/configurations/spa9xx/template")
+    public String getTemplateConfigFileForSPA9XX(Model model, Principal principal, HttpServletRequest request) {
+        log.info("User: " + principal.getName() + "; From: " + requestService.getClientIp(request) + "; Try to get page: " + request.getRequestURI());
+        String templateSPA = configFileService.getTemplateConfigFileForSPA9XX();
+        model.addAttribute("templateSPA", templateSPA);
+        return "phone/spa9xx/template";
+    }
+
+
+    @GetMapping("/server/configurations/vp51/init")
+    public String getInitialConfigFileForVP51(Model model, Principal principal, HttpServletRequest request) {
+        log.info("User: " + principal.getName() + "; From: " + requestService.getClientIp(request) + "; Try to get page: " + request.getRequestURI());
+        String initSNR = configFileService.getInitialConfigFileForVP51();
+        model.addAttribute("initSNR", initSNR);
+        return "phone/vp5x/init";
+    }
+
+
+    @GetMapping("/server/configurations/vp52/init")
+    public String getInitialConfigFileForVP52(Model model, Principal principal, HttpServletRequest request) {
+        log.info("User: " + principal.getName() + "; From: " + requestService.getClientIp(request) + "; Try to get page: " + request.getRequestURI());
+        String initSNR = configFileService.getInitialConfigFileForVP52();
+        model.addAttribute("initSNR", initSNR);
+        return "phone/vp5x/init";
+    }
+
+
+    @GetMapping("/server/configurations/vp5x/template")
+    public String getTemplateConfigFileForVP5X(Model model, Principal principal, HttpServletRequest request) {
+        log.info("User: " + principal.getName() + "; From: " + requestService.getClientIp(request) + "; Try to get page: " + request.getRequestURI());
+        String templateSNR = configFileService.getTemplateConfigFileForVP5X();
+        model.addAttribute("templateSNR", templateSNR);
+        return "phone/vp5x/template";
+    }
 }

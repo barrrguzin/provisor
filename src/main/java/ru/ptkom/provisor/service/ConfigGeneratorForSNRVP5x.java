@@ -2,10 +2,12 @@ package ru.ptkom.provisor.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import ru.ptkom.provisor.config.PropertiesConfig;
 import ru.ptkom.provisor.dao.ECSSUserDataDAO;
 import ru.ptkom.provisor.models.sipUsers.OutUsers;
@@ -14,7 +16,7 @@ import ru.ptkom.provisor.models.sipUsers.OutUsers;
 import java.io.IOException;
 
 @Slf4j
-@Component
+@Service
 public class ConfigGeneratorForSNRVP5x {
 
 
@@ -29,10 +31,8 @@ public class ConfigGeneratorForSNRVP5x {
 
 
     static {
-        //works
         ApplicationContext context = new AnnotationConfigApplicationContext(PropertiesConfig.class);
         Environment config = context.getEnvironment();
-
         PATH_TO_TEMPLATE = config.getProperty("path.snrvp.templ");
         PATH_TO_READY_CONFIG_FILES = config.getProperty("path.snrvp.confs");
     }

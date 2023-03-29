@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:insert="~{fragments/base :: head}"></div>
+    <title>SPA9XX конфигурационный файл по умолчанию</title>
+</head>
+<body>
+<div th:insert="~{fragments/base :: body}"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/autosize.js/4.0.2/autosize.min.js"></script>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-6">
+<!--            <div>-->
+<!--                <a href="/server/configurations/spa9xx/init/edit">-->
+<!--                    <button type="button" class="btn btn-outline-warning">Изменить конфигурационный файл по умолчанию для SPA9XX</button>-->
+<!--                </a>-->
+<!--            </div>-->
+
+            <pre class="text-black">
+                <b-form-textarea class="form-control h-auto resize-both autosize" th:text="${initSPA}" readonly></b-form-textarea>
+            </pre>
+        </div>
+
+    </div>
+</div>
+<a href="/server/configurations">
+    <button type="button" class="btn btn-outline-dark">Назад</button>
+</a>
+
+</body>
+</html>

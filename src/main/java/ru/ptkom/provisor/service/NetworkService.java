@@ -2,6 +2,7 @@ package ru.ptkom.provisor.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.core.env.Environment;
@@ -17,6 +18,7 @@ import java.net.UnknownHostException;
 @Service
 public class NetworkService {
 
+
     @Autowired
     private FileService fileService;
 
@@ -31,7 +33,6 @@ public class NetworkService {
     static {
         ApplicationContext context = new AnnotationConfigApplicationContext(PropertiesConfig.class);
         Environment config = context.getEnvironment();
-
         PATH_TO_ARP_TABLE = config.getProperty("arp.table.path");
     }
 

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:insert="~{fragments/base :: head}"></div>
+    <title>Управление сервером</title>
+</head>
+<body>
+<div th:insert="~{fragments/base :: body}"></div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-6">
+            <h3>Linksys SPA 921/941</h3>
+            <ul class="mx-auto">
+                <p/>
+                <a href="/server/configurations/spa921/init"><button type="button" class="btn btn-light">Конфигурационный файл по умолчанию SPA921</button></a><p/>
+                <a href="/server/configurations/spa941/init"><button type="button" class="btn btn-light">Конфигурационный файл по умолчанию SPA941</button></a><p/>
+                <a href="/server/configurations/spa9xx/template"><button type="button" class="btn btn-light">Шаблон конфигурационного файла</button></a><p/>
+            </ul>
+        </div>
+
+        <div class="col-sm-6">
+            <h3>SNR VP-51/52</h3>
+            <ul class="mx-auto">
+                <p/>
+                <a href="/server/configurations/vp51/init"><button type="button" class="btn btn-light">Конфигурационный файл по умолчанию VP-51</button></a><p/>
+                <a href="/server/configurations/vp52/init"><button type="button" class="btn btn-light">Конфигурационный файл по умолчанию VP-52</button></a><p/>
+                <a href="/server/configurations/vp5x/template"><button type="button" class="btn btn-light">Шаблон конфигурационного файла</button></a><p/>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<a href="/server">
+    <button type="button" class="btn btn-outline-dark">Назад</button>
+</a>
+
+</body>
+</html>
