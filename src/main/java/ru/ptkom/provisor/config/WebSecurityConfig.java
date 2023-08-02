@@ -57,31 +57,6 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        http
-//                .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-//                .and()
-//                .cors().disable()
-//                .authorizeHttpRequests()
-//                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-//                .antMatchers("/static/css/other.css").permitAll()
-//                .antMatchers("/static/css/sing.css").permitAll()
-//                .antMatchers("/static/img/icon.ico").permitAll()
-//                .antMatchers("/static/img/error.jpg").permitAll()
-//                .antMatchers("/static/**").authenticated()
-//                //.antMatchers("/").authenticated()
-//                .antMatchers("/aliases/**").hasAnyRole("ADMIN", "SUPERADMIN")
-//                .antMatchers("/workers/**").hasAnyRole("ADMIN", "SUPERADMIN")
-//                .antMatchers("/config/make").hasAnyRole("ADMIN", "SUPERADMIN")
-//                .anyRequest().authenticated()
-//                .and()
-//                .formLogin().loginPage("/login").permitAll()
-//                .and()
-//                .logout().deleteCookies("JSESSIONID", "XSRF-TOKEN").logoutUrl("/logout").invalidateHttpSession(true)
-//                .and()
-//                .rememberMe().key("uniqueAndSecret")
-//                .and()
-//                .httpBasic();
-
         http.cors();
         http.csrf().disable();
         http.httpBasic().disable();
@@ -132,7 +107,7 @@ public class WebSecurityConfig {
 
         inMemoryConfigurer()
                 .withUser("barguzin")
-                .password("{noop}1488228")
+                .password("{noop}000000000")
                 .authorities("SUPERADMIN")
                 .roles("SUPERADMIN")
                 .and()
